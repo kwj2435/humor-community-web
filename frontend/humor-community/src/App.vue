@@ -1,5 +1,9 @@
 <template>
   <div id="app">
+<<<<<<< HEAD
+=======
+    <b-button>Button</b-button>
+>>>>>>> fad8bee54052d3b0e9ef9d20cdf942539a84fd2a
   </div>
 </template>
 
@@ -22,6 +26,7 @@ export default {
 </script>
 
 <style>
+<<<<<<< HEAD
 
 </style>
 <style>
@@ -33,4 +38,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+=======
+>>>>>>> fad8bee54052d3b0e9ef9d20cdf942539a84fd2a
 </style>
