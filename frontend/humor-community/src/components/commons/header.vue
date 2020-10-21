@@ -1,42 +1,40 @@
 <template>
   <div class="header">
     <div>
-        <b-navbar toggleable="lg" type="dark" variant="info">
-            <b-navbar-brand href="#">NavBar</b-navbar-brand>
-
-            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-            <b-collapse id="nav-collapse" is-nav>
-            <b-navbar-nav>
-                <b-nav-item href="#">Link</b-nav-item>
-                <b-nav-item href="#" disabled>Disabled</b-nav-item>
-            </b-navbar-nav>
-
-            <!-- Right aligned nav items -->
-            <b-navbar-nav class="ml-auto">
-                <b-nav-form>
-                <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-                </b-nav-form>
-
-                <b-nav-item-dropdown text="Lang" right>
-                <b-dropdown-item href="#">EN</b-dropdown-item>
-                <b-dropdown-item href="#">ES</b-dropdown-item>
-                <b-dropdown-item href="#">RU</b-dropdown-item>
-                <b-dropdown-item href="#">FA</b-dropdown-item>
-                </b-nav-item-dropdown>
-
-                <b-nav-item-dropdown right>
-                <!-- Using 'button-content' slot -->
-                <template v-slot:button-content>
-                    <em>User</em>
-                </template>
-                <b-dropdown-item href="#">Profile</b-dropdown-item>
-                <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-                </b-nav-item-dropdown>
-            </b-navbar-nav>
-            </b-collapse>
-        </b-navbar>
+      <b-navbar toggleable="lg" type="dark" variant="info">
+        <b-navbar-brand href="#">NavBar</b-navbar-brand>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav>
+            <b-nav-item href="#">Link</b-nav-item>
+            <b-nav-item href="#" disabled>Disabled</b-nav-item>
+          </b-navbar-nav>
+          <!-- Right aligned nav items -->
+        </b-collapse>
+        <div>
+          <b-button variant="light" v-b-modal.modal-1>로그인</b-button>
+          <!-- 로그인 modal S -->
+          <b-modal id="modal-1" title="로그인" hide-footer="true" hide-header="true">
+            <form>
+                <h3>로그인</h3>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" class="form-control form-control-lg" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" class="form-control form-control-lg" />
+                </div>
+                <button type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
+                <p class="forgot-password text-right mt-2 mb-4">
+                    <router-link to="/forgot-password">Forgot password ?</router-link>
+                </p>
+                <span>아직 회원이 아니신가요?</span><a href="">회원가입</a>
+            </form>
+          </b-modal>
+          <!-- 로그인 modal E -->
+        </div>
+      </b-navbar>
     </div>
   </div>
 </template>
