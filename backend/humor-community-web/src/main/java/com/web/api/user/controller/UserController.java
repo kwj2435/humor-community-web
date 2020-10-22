@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,7 +40,7 @@ public class UserController {
 		return new ResponseEntity<UserInfo>(userInfo,HttpStatus.OK);
 	}
 	@PostMapping("/login")
-	public ResponseEntity<Object> doLogin(UserVO userVO) throws BadCredentialsException {
+	public ResponseEntity<Object> doLogin(@RequestBody UserVO userVO) throws BadCredentialsException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userVO.getUserEmail(),userVO.getUserPassword()));
 			/*
@@ -50,7 +51,7 @@ public class UserController {
 		}catch(BadCredentialsException e) {
 			throw new BadCredentialsException("Incorrect username or password",e);
 		}
-		
+	
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userVO.getUserEmail());
 		final String token = jwtUtilService.createToken(userDetails.getUsername(),"USER");	//유저이름, 권한List를 파라미터로 넣음
 		
