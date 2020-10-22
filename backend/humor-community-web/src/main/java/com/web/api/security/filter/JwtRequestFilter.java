@@ -20,8 +20,6 @@ import com.web.api.security.service.JwtUtilService;
 public class JwtRequestFilter extends OncePerRequestFilter{
 	@Autowired
 	private JwtUtilService jwtUtilService;
-	@Autowired
-	private JwtUserDetailsService jwtUserDetailsService;
 	
 	// 1. Client 요청 헤더에서 Authorization 부분을 추출
 	// 2. Jwt 존재시 토큰 유효성 검사

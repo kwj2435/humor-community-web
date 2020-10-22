@@ -10,11 +10,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.web.api.user.dto.UserVO;
 import com.web.api.user.service.UserService;
 
 //UserDetailsService는 DB에서 유저 정보를 가져오는 역할을 한다.
+@Service
 public class JwtUserDetailsService implements UserDetailsService{
 	
 	@Autowired

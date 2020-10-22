@@ -3,8 +3,10 @@ package com.web.api.user.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="tb_user")
 public class UserInfo {
 	@Id
 	@Column(name="user_idx")
