@@ -1,5 +1,7 @@
 package com.web.api.user.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.api.user.dto.UserVO;
@@ -9,11 +11,10 @@ import com.web.api.user.repository.UserRepository;
 @Service
 public class UserService {
 	
+	@Autowired
 	public UserRepository userRepository;
-	
-	public UserService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public UserVO getUserInfoByUserEmail(String userEmail) {
 		UserVO userVO = new UserVO();
@@ -24,12 +25,14 @@ public class UserService {
 		return userVO;
 	}
 	public UserInfo setUserInfo(UserVO userVO) throws IllegalArgumentException{
+		
+		
 		if(userVO.getUserEmail().equals("") || userVO.getUserPassword().equals("")) {
 			throw new IllegalArgumentException();
 		}
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserEmail(userVO.getUserEmail());
-		userInfo.setUserPassword(userVO.getUserPassword());
+		userInfo.setUserPassword(passwordEncoder.encode(userVO.getUserPassword()));
 		userInfo.setUserNickname(userVO.getUserNickname());
 		userInfo.setUserRoll("USER");
 		

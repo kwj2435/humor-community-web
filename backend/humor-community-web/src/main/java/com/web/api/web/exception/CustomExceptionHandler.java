@@ -1,4 +1,4 @@
-package com.web.api.user.exception;
+package com.web.api.web.exception;
 
 import java.util.Date;
 

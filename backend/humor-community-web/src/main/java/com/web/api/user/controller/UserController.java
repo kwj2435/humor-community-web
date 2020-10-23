@@ -21,7 +21,7 @@ import com.web.api.user.entity.UserInfo;
 import com.web.api.user.service.UserService;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/v1/api/user")
 public class UserController {
 	
 	@Autowired
