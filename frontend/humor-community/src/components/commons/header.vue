@@ -25,11 +25,11 @@
                     <label>Password</label>
                     <input type="password" class="form-control form-control-lg" />
                 </div>
-                <button type="submit" class="btn btn-dark btn-lg btn-block">Sign In</button>
+                <button type="submit" class="btn btn-dark btn-lg btn-block" v-on:click="login()">Sign In</button>
                 <p class="forgot-password text-right mt-2 mb-4">
                     <router-link to="/forgot-password">Forgot password ?</router-link>
                 </p>
-                <span>아직 회원이 아니신가요?</span><a href="">회원가입</a>
+                <span>아직 회원이 아니신가요?</span><a href="/signup">회원가입</a>
             </form>
           </b-modal>
           <!-- 로그인 modal E -->
@@ -40,8 +40,16 @@
 </template>
 
 <script>
-export default {
+import axios from 'axios'
 
+export default {
+  methods:{
+    login:function(){
+      axios.post('http://localhost:8081/v1/api/user/login')
+      .then()
+      .catch()  
+    }
+  }
 }
 </script>
 

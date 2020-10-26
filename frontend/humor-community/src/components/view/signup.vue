@@ -3,26 +3,26 @@
         <main-header></main-header>
         <div class="body">
             <div class="signup-form">
-                <form action="/examples/actions/confirmation.php" method="post">
+                <form v-on:submit.prevent="signup">
                     <h2>회원가입</h2>
                     <p>Please fill in this form to create an account!</p>
                     <hr>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input type="text" class="form-control" name="username" placeholder="Username" required="required">
+                            <input type="text" v-model="userNickname" class="form-control" name="username" placeholder="Username" required="required">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
-                            <input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+                            <input type="email" v-model="userEmail" class="form-control" name="email" placeholder="Email Address" required="required">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input type="text" class="form-control" name="password" placeholder="Password" required="required">
+                            <input type="text" v-model="userPassword" class="form-control" name="password" placeholder="Password" required="required">
                         </div>
                     </div>
                     <div class="form-group">
@@ -50,12 +50,37 @@
 <script>
 import header from "../../components/commons/header.vue"
 import footer from "../../components/commons/footer.vue"
+import axios from 'axios'
 
 export default {
      components: {
     'main-header':header,
     'main-footer':footer
-  },  
+  },
+  data :function(){
+    return {
+        userEmail:'',
+        userPassword:'',
+        userNickname:''
+    }
+  },
+  methods:{
+      signup:function(){
+          var form = new FormData();
+          form.append('userNickname',this.userNickname);
+          form.append('userEmail',this.userEmail);
+          form.append('userPassword',this.userPassword);
+          axios.post('http://localhost:8081/v1/api/user/signup'
+          ,form)
+            .then(res =>{
+                console.log(res);
+                this.$router.push('/');
+            })
+            .catch(err =>{
+                console.log(err);
+            })
+      }
+  }  
 }
 </script>
 <style>
