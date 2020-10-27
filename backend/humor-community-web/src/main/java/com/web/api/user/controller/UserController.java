@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,7 +41,7 @@ public class UserController {
 		return new ResponseEntity<UserInfo>(userInfo,HttpStatus.OK);
 	}
 	@PostMapping("/login")
-	public ResponseEntity<Object> doLogin(@RequestBody UserVO userVO) throws BadCredentialsException {
+	public ResponseEntity<Object> doLogin(UserVO userVO) throws BadCredentialsException,InternalAuthenticationServiceException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userVO.getUserEmail(),userVO.getUserPassword()));
 			/*
@@ -55,6 +56,6 @@ public class UserController {
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userVO.getUserEmail());
 		final String token = jwtUtilService.createToken(userDetails.getUsername(),"USER");	//유저이름, 권한List를 파라미터로 넣음
 		
-		return ResponseEntity.ok(new AuthenticationResponse(token));
+		return ResponseEntity.ok(new AuthenticationResponse(token,userVO.getUserEmail()));
 	}
 }
