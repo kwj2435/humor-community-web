@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +23,12 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	@PostMapping("/")
-	public ResponseEntity<BoardInfo> postBoardContent(@RequestBody BoardInfo boardVO) throws Exception{
+	@PostMapping("/{boardName}")
+	public ResponseEntity<BoardInfo> postBoardContent(@PathVariable("boardName")String boardName, BoardInfo boardVO) throws Exception{
 		
+		System.out.println(boardName);
+		System.out.println(boardVO.getBoardContentTitle());
+		boardVO.setBoardName(boardName);
 		BoardInfo resultInfo = boardService.postBoardContent(boardVO);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()

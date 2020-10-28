@@ -2,17 +2,21 @@
   <div class="header">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="#">NavBar</b-navbar-brand>
+        <b-navbar-brand href="/">DanDan.net</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
-            <b-nav-item href="#">Link</b-nav-item>
-            <b-nav-item href="#" disabled>Disabled</b-nav-item>
+            <b-nav-item href="/board/dandan">단단한유머</b-nav-item>
+            <b-nav-item href="/board/reading">읽을거리 판</b-nav-item>
+            <b-nav-item href="/board/excercise">운동 판</b-nav-item>
+            <b-nav-item href="/board/it">IT/프로그래밍 판</b-nav-item>
+             <b-nav-item href="/board/consulting">고민상담 판</b-nav-item>
           </b-navbar-nav>
           <!-- Right aligned nav items -->
         </b-collapse>
         <div>
-          <b-button v-if=storage.getItem('userEmail') variant="light" v-b-modal.modal-1>로그인</b-button>
+          <b-button v-if="jwtUserEmail == null" variant="light" v-b-modal.modal-1>로그인</b-button>
+          <b-button v-else variant="light" v-b-modal.modal-1>로그아웃</b-button>
           <!-- 로그인 modal S -->
           <b-modal id="modal-1" title="로그인" hide-footer="true" hide-header="true">
             <form v-on:submit.prevent="login">
@@ -44,27 +48,32 @@
 import axios from 'axios'
 
 const storage = window.sessionStorage;
-const ai = axios.create({
-  baseURL:"http:localhost:8081/v1/api"
-});
 export default {
   data:function(){
     return{
       userEmail:'',
       userPassword:'',
-      wrongInfo:false
+      wrongInfo:false,
+      jwt:window.sessionStorage.getItem("X-AUTH-TOKEN"),
+      jwtUserEmail:window.sessionStorage.getItem("userEmail")
     }
+  },
+  ready(){
+    this.jwt = window.sessionStorage.getItem("X-AUTH-TOKEN");
+    console.log(this.jwt);
   },
   methods:{
     login:function(){
       var form = new FormData();
       form.append('userEmail',this.userEmail);
       form.append('userPassword',this.userPassword);
-      ai.post('/user/login',form)
+      axios.post('http://localhost:8081/v1/api/user/login',form)
       .then(res => {
         console.log(res);
-        storage.setItem("X-AUTH-TOKEN",res.headers["token"]);
-        storage.setItem("userEmail",res.headers["userEmail"]);
+        console.log(res.data.token);
+        storage.setItem("X-AUTH-TOKEN",res.data.token);
+        storage.setItem("userEmail",res.data.userEmail);
+        location.reload();
       })
       .catch(error => {
         console.log(error);

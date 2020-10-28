@@ -10,6 +10,13 @@ CREATE TABLE tb_user(
 	user_roll VARCHAR(10) NOT null
 );
 
+DROP TABLE IF EXISTS tb_board_list;
+CREATE TABLE tb_board_list(
+	list_idx INT AUTO_INCREMENT,
+	board_name VARCHAR(30) NOT NULL PRIMARY KEY,
+	board_description varchar(100)
+);
+
 DROP TABLE IF EXISTS tb_board;
 CREATE TABLE tb_board(
 	board_idx INT AUTO_INCREMENT PRIMARY KEY,
