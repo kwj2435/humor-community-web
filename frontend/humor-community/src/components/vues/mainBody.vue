@@ -3,56 +3,26 @@
     <div class="body">
         <div class="body-wrapper">
             <div class="dandan">
-                <h2><a href="/board/dandan">단단한유머</a></h2>
-                <table class="table">
-                <tbody>
-                    <tr v-for="(i,item) in items" :key="item">
-                    <td>{{i.age}}</td>
-                    </tr>
-                </tbody>
-                </table>
+                <h5><a href="/board/dandan">단단한유머</a></h5>
+                <b-table hover :items="dandanBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
             </div>
             <div class="table23">
                 <div class="reading">
-                    <h2><a href="/board/reading">읽을거리 판</a></h2>
-                    <table class="table">
-                    <tbody>
-                        <tr v-for="(i,item1) in items" :key="item1">
-                        <td>{{i.age}}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+                    <h5><a href="/board/reading">읽을거리 판</a></h5>
+                    <b-table hover :items="readingBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
                 </div>
-                <div class="excercise">
-                    <h2><a href="/board/excercise">운동 판</a></h2>
-                    <table class="table">
-                    <tbody>
-                        <tr v-for="(i,item2) in items" :key="item2">
-                        <td>{{i.age}}</td>
-                        </tr>
-                    </tbody>
-                    </table>
+                <div class="exercise">
+                    <h5><a href="/board/exercise">운동 판</a></h5>
+                    <b-table hover :items="exerciseBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
                 </div>
             </div>
             <div class="it">
-                <h2><a href="/board/it">IT/프로그래밍 판</a></h2>
-                <table class="table">
-                <tbody>
-                    <tr v-for="(i,item3) in items" :key="item3">
-                    <td>{{i.age}}</td>
-                    </tr>
-                </tbody>
-                </table>
+                <h5><a href="/board/it">IT/프로그래밍 판</a></h5>
+                    <b-table hover :items="itBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
             </div>
             <div class="consulting">
-                <h2><a href="/board/consulting">고민상담 판</a></h2>
-                <table class="table">
-                <tbody>
-                    <tr v-for="(i,item4) in items" :key="item4">
-                    <td>{{i.age}}</td>
-                    </tr>
-                </tbody>
-                </table>
+                <h5><a href="/board/consulting">고민상담 판</a></h5>
+                <b-table hover :items="consultingBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
             </div>
         </div>
     </div>
@@ -60,16 +30,52 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
     return {
-      fields:['test'],
+      fields:[
+          { key:'boardContentTitle', label:'제목'},
+      ],
       items: [
-        { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-        { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-        { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-        { age: 38, first_name: 'Jami', last_name: 'Carney' }
-      ]
+        { boardContentTitle: 40 }
+      ],
+      dandanBoard : [],
+      readingBoard :[],
+      exerciseBoard : [],
+      itBoard : [],
+      consultingBoard :[]
+    }
+  },
+  beforeMount(){
+      this.getBoardContentList('dandan',9),
+      this.getBoardContentList('reading',9),
+      this.getBoardContentList('exercise',9),
+      this.getBoardContentList('it',9),
+      this.getBoardContentList('consulting',9)
+  },
+  methods:{
+      getBoardContentList:function(boardName,limit){
+          axios.get("http://localhost:8081/v1/api/board/" + boardName + "/list",{params: {
+      limitNum: limit
+      }
+    })
+      .then(res =>{
+          if(boardName == "dandan"){ this.dandanBoard = res.data;}
+          else if(boardName == "reading"){ this.readingBoard = res.data;}
+          else if(boardName == "exercise"){ 
+              console.log("test");console.log(res);this.exerciseBoard = res.data;
+              console.log(this.exerciseBoard);
+              }
+          else if(boardName == "it"){ this.itBoard = res.data;}
+          else if(boardName == "consulting"){ this.consultingBoard = res.data;}
+      })
+    },
+    rowClick(item){
+        console.log(item);
+    this.$router.push({
+    path:'/board/'+ this.boardName + '/' + item.boardIdx
+    });
     }
   }
 }
@@ -77,33 +83,19 @@ export default {
 
 <style>
 .body {
-  width:80vw;
+  width:70vw;
   margin-bottom:2vw;
   background-color: white;
   margin-top:-0px;
-  padding-top:5vh;
+  padding-top:8vh;
+  padding-bottom: 3vh;
+  margin-left:14vw;
 }
 .body-wrapper{
-    margin-left:7vw;
+    margin-left:3.5vw;
 }
-.dandan {width:32.5vw;height:30%;float:left;}
-.table23{
-    width:32.5vw;
-    height:30%;
-    float:left;
-    margin-left:20px;
-}
-.reading{width:32.5vw;}
-.excercise{width:32.5vw;}
-.it{
-    width:32.5vw;
-    display:inline-block;
-    clear:both;
-}
-.consulting{
-    width:32.5vw;
-    display:inline-block;
-    clear:both;
-    margin-left:20px;
+tr { line-height: 8px;}
+.hidden_header{
+    display:none
 }
 </style>

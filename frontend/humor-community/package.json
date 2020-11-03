@@ -13,6 +13,7 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.18.0",
+    "ckeditor5-simple-upload": "^1.0.7",
     "core-js": "^3.6.5",
     "vue": "^2.6.12",
     "vue-router": "^3.4.7"

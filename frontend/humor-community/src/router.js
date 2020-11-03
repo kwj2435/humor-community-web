@@ -5,6 +5,7 @@ import signup from './components/view/signup'
 import main from './components/view/main'
 import listDetail from './components/view/listDetail'
 import boardWrtie from './components/view/boardWrite'
+import boardDetail from './components/view/boardDetail'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
             path:"/board/:boardName/write",
             name:"boardWrite",
             component:boardWrtie
+        },
+        {
+            path:"/board/:boardName/:boardIdx",
+            name:"boardDetail",
+            component:boardDetail
         }
     ]
 })

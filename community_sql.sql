@@ -27,4 +27,12 @@ CREATE TABLE tb_board(
 	board_content_begin DATE NOT NULL,            # 작성일
 	board_view_count INT NOT NULL                # 조회수
 );
-	
+
+DROP TABLE IF EXISTS tb_file;
+CREATE TABLE tb_file(
+	file_no int AUTO_INCREMENT PRIMARY KEY,
+	file_original_name varchar(100) not null,
+	file_stored_name varchar(100) NOT NULL,
+	file_path VARCHAR(200) NOT NULL,
+	file_begin_date date not null
+)

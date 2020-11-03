@@ -13,24 +13,24 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tb_board")
+@Table(name = "tb_board")
 public class BoardInfo {
 	@Id
-	@Column(name="board_idx")
+	@Column(name = "board_idx")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int boardIdx;
-	@Column(name="board_name")
+	@Column(name = "board_name")
 	private String boardName;
-	@Column(name="board_content_title")
+	@Column(name = "board_content_title")
 	private String boardContentTitle;
 	@Lob
-	@Column(name="board_content")
+	@Column(name = "board_content")
 	private String boardContent;
-	@Column(name="board_content_writer")
+	@Column(name = "board_content_writer")
 	private String boardContentWriter;
-	@Column(name="board_view_count")
+	@Column(name = "board_view_count")
 	private int boardViewCount;
-	@Column(name="board_content_begin")
+	@Column(name = "board_content_begin")
 	private Date boardContentBegin;
 	
 	@PrePersist

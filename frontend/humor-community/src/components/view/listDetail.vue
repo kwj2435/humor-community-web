@@ -8,7 +8,7 @@
 
 <script>
 import header from '../commons/header';
-import listDetail from '../vues/listDetail';
+import listDetail from '../vues/listDetailBody';
 import footer from '../commons/footer';
 
 export default {

@@ -16,7 +16,7 @@
         </b-collapse>
         <div>
           <b-button v-if="jwtUserEmail == null" variant="light" v-b-modal.modal-1>로그인</b-button>
-          <b-button v-else variant="light" v-b-modal.modal-1>로그아웃</b-button>
+          <b-button v-else variant="light" v-b-modal.modal-1 @click="logout()">로그아웃</b-button>
           <!-- 로그인 modal S -->
           <b-modal id="modal-1" title="로그인" hide-footer="true" hide-header="true">
             <form v-on:submit.prevent="login">
@@ -63,6 +63,12 @@ export default {
     console.log(this.jwt);
   },
   methods:{
+    logout:function(){
+      window.sessionStorage.removeItem("X-AUTH-TOKEN");
+      window.sessionStorage.removeItem("userEmail");
+      alert("로그아웃 되었습니다.")
+      this.$router.push("/");
+    },
     login:function(){
       var form = new FormData();
       form.append('userEmail',this.userEmail);
