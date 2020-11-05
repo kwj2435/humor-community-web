@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.web.api.board.entity.BoardInfo;
@@ -28,8 +30,9 @@ public class BoardService {
 		Pageable pageAble = PageRequest.of(0, limitNum);
 		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}
-	public List<BoardInfo> getBoardContentList(String boardName) throws Exception{
-		return boardRepository.findAllByBoardName(boardName);
+	public List<BoardInfo> getBoardContentList(String boardName,int currentPage,int limit) throws Exception{
+		PageRequest pageRequest = PageRequest.of(currentPage,limit,Sort.by(Direction.DESC,"boardContentBegin"));
+		return boardRepository.findAllByBoardNameOrderByBoardContentBeginDesc(boardName,pageRequest);
 	}
 	public List<String> getBoardNameList() throws Exception{
 		return boardRepository.findBoardNameList();

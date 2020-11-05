@@ -55,7 +55,8 @@ public class UserController {
 	
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userVO.getUserEmail());
 		final String token = jwtUtilService.createToken(userDetails.getUsername(),"USER");	//유저이름, 권한List를 파라미터로 넣음
+		final UserVO responseUserInfo = userService.getUserInfoByUserEmail(userVO.getUserEmail());
 		
-		return ResponseEntity.ok(new AuthenticationResponse(token,userVO.getUserEmail()));
+		return ResponseEntity.ok(new AuthenticationResponse(token,responseUserInfo));
 	}
 }

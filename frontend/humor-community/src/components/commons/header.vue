@@ -8,15 +8,20 @@
           <b-navbar-nav>
             <b-nav-item href="/board/dandan">단단한유머</b-nav-item>
             <b-nav-item href="/board/reading">읽을거리 판</b-nav-item>
-            <b-nav-item href="/board/excercise">운동 판</b-nav-item>
+            <b-nav-item href="/board/exercise">운동 판</b-nav-item>
             <b-nav-item href="/board/it">IT/프로그래밍 판</b-nav-item>
              <b-nav-item href="/board/consulting">고민상담 판</b-nav-item>
           </b-navbar-nav>
           <!-- Right aligned nav items -->
         </b-collapse>
         <div>
-          <b-button v-if="jwtUserEmail == null" variant="light" v-b-modal.modal-1>로그인</b-button>
-          <b-button v-else variant="light" v-b-modal.modal-1 @click="logout()">로그아웃</b-button>
+          <div v-if="jwtUserEmail == null">
+            <b-button  variant="light" v-b-modal.modal-1>로그인</b-button>
+          </div>
+          <div v-else>
+            <p class="welcom">{{jwtUserNickName}}님 안녕하세요.</p>
+            <b-button variant="light" @click="logout()">로그아웃</b-button>
+          </div>
           <!-- 로그인 modal S -->
           <b-modal id="modal-1" title="로그인" hide-footer="true" hide-header="true">
             <form v-on:submit.prevent="login">
@@ -55,7 +60,8 @@ export default {
       userPassword:'',
       wrongInfo:false,
       jwt:window.sessionStorage.getItem("X-AUTH-TOKEN"),
-      jwtUserEmail:window.sessionStorage.getItem("userEmail")
+      jwtUserEmail:window.sessionStorage.getItem("userEmail"),
+      jwtUserNickName:window.sessionStorage.getItem("userNickname"),
     }
   },
   ready(){
@@ -67,7 +73,7 @@ export default {
       window.sessionStorage.removeItem("X-AUTH-TOKEN");
       window.sessionStorage.removeItem("userEmail");
       alert("로그아웃 되었습니다.")
-      this.$router.push("/");
+      this.$router.go(this.$router.currentRouter);
     },
     login:function(){
       var form = new FormData();
@@ -78,7 +84,8 @@ export default {
         console.log(res);
         console.log(res.data.token);
         storage.setItem("X-AUTH-TOKEN",res.data.token);
-        storage.setItem("userEmail",res.data.userEmail);
+        storage.setItem("userEmail",res.data.userInfo.userEmail);
+        storage.setItem("userNickname",res.data.userInfo.userNickname);
         location.reload();
       })
       .catch(error => {
@@ -93,5 +100,10 @@ export default {
 <style>
 .wrongInfo{
   color:red;
+}
+.welcom{
+  display:inline-block;
+  padding-top:1vh;
+  padding-right:1vw;
 }
 </style>

@@ -21,7 +21,8 @@ public class UserService {
 		UserInfo user = userRepository.findByUserEmail(userEmail);
 		userVO.setUserEmail(user.getUserEmail());
 		userVO.setUserPassword(user.getUserPassword());
-		
+		userVO.setUserNickname(user.getUserNickname());
+		userVO.setUserRoll(user.getUserRoll());
 		return userVO;
 	}
 	public UserInfo setUserInfo(UserVO userVO) throws IllegalArgumentException{

@@ -6,7 +6,7 @@
                 <h5><a href="/board/dandan">단단한유머</a></h5>
                 <b-table hover :items="dandanBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
             </div>
-            <div class="table23">
+            <div class="dandan-right">
                 <div class="reading">
                     <h5><a href="/board/reading">읽을거리 판</a></h5>
                     <b-table hover :items="readingBoard" :fields="fields" @row-clicked="rowClick" thead-class="hidden_header"></b-table>
@@ -35,7 +35,9 @@ export default {
     data() {
     return {
       fields:[
-          { key:'boardContentTitle', label:'제목'},
+        { 
+            key:'boardContentTitle', label:'제목',
+        },
       ],
       items: [
         { boardContentTitle: 40 }
@@ -48,9 +50,9 @@ export default {
     }
   },
   beforeMount(){
-      this.getBoardContentList('dandan',9),
-      this.getBoardContentList('reading',9),
-      this.getBoardContentList('exercise',9),
+      this.getBoardContentList('dandan',13),
+      this.getBoardContentList('reading',6),
+      this.getBoardContentList('exercise',6),
       this.getBoardContentList('it',9),
       this.getBoardContentList('consulting',9)
   },
@@ -64,7 +66,7 @@ export default {
           if(boardName == "dandan"){ this.dandanBoard = res.data;}
           else if(boardName == "reading"){ this.readingBoard = res.data;}
           else if(boardName == "exercise"){ 
-              console.log("test");console.log(res);this.exerciseBoard = res.data;
+              console.log(res);this.exerciseBoard = res.data;
               console.log(this.exerciseBoard);
               }
           else if(boardName == "it"){ this.itBoard = res.data;}
@@ -73,8 +75,8 @@ export default {
     },
     rowClick(item){
         console.log(item);
-    this.$router.push({
-    path:'/board/'+ this.boardName + '/' + item.boardIdx
+        this.$router.push({
+        path:'/board/'+ item.boardName + '/' + item.boardIdx
     });
     }
   }
@@ -82,6 +84,24 @@ export default {
 </script>
 
 <style>
+.dandan{
+    width: 30vw;
+    float:left;
+}
+.dandan-right{
+    width:30vw;
+    float:left;
+    margin-left:3vw;
+}
+.it{
+    display:inline-block;
+    width: 30vw;
+}
+.consulting{
+    display:inline-block;
+    width:30vw;
+    margin-left:3vw;
+}
 .body {
   width:70vw;
   margin-bottom:2vw;
@@ -97,5 +117,8 @@ export default {
 tr { line-height: 8px;}
 .hidden_header{
     display:none
+}
+td{
+    cursor: pointer;
 }
 </style>

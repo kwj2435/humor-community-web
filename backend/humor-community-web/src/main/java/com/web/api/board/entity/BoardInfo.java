@@ -1,6 +1,5 @@
 package com.web.api.board.entity;
 
-import java.sql.Blob;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "tb_board")
@@ -31,6 +34,8 @@ public class BoardInfo {
 	@Column(name = "board_view_count")
 	private int boardViewCount;
 	@Column(name = "board_content_begin")
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
 	private Date boardContentBegin;
 	
 	@PrePersist

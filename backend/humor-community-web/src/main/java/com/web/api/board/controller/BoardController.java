@@ -63,7 +63,11 @@ public class BoardController {
 	}
 	
 	@GetMapping("/{boardName}")	//게시판 글 목록
-	public ResponseEntity<List<BoardInfo>> getBoardContentList(@PathVariable("boardName") String boardName) throws Exception{
+	public ResponseEntity<List<BoardInfo>> getBoardContentList(
+			@PathVariable("boardName") String boardName,
+			@RequestParam("currentPage") Integer currentPage,
+			@RequestParam("limit") Integer limit
+			) throws Exception{
 
 		List<BoardInfo> boardContentList = boardService.getBoardContentList(boardName);
 		
