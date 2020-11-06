@@ -40,7 +40,7 @@ export default {
     return{
       editor : classicEditor,
       contentTitle : '',
-      contentWriter : window.sessionStorage.getItem("userEmail"),
+      contentWriter : window.sessionStorage.getItem("userNickname"),
       contentFile : null,
       loginCheck : false,
       editorData : '<p>내용을 입력해주세요.</p>',

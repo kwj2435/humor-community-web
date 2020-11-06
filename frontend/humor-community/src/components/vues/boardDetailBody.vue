@@ -3,11 +3,15 @@
       <h3><a @click = "link">{{boardNameTitle}}</a></h3>
       <div class="content">
           <h4>{{boardTitle}}</h4>
-            <div v-html="boardContent">
+            <div class="content-area" v-html="boardContent">
             </div>
             <b-button variant="info" @click="link">목록</b-button>
             <b-button variant="info" @click="modifyContent">수정</b-button>
             <b-button variant="danger" @click="deleteContent">삭제</b-button>
+      </div>
+      <div class="comment-wrapper">
+          <b-form-textarea rows="3"></b-form-textarea>
+          <b-button variant="info" @click="link">입력</b-button>
       </div>
   </div>
 </template>
@@ -73,5 +77,7 @@ export default {
 </script>
 
 <style>
-
+.comment-wrapper{
+    margin-top:2vh;
+}
 </style>

@@ -11,9 +11,7 @@ import com.web.api.board.entity.BoardInfo;
 
 public interface BoardRepository extends JpaRepository<BoardInfo, Integer>{
 	
-	public List<BoardInfo> findAllByBoardNameOrderByBoardContentBeginDesc(String boardName,Pageable pageAble);
-	
-	public List<BoardInfo> findAllByBoardName(String boardName,Pageable pageAble);
+	public List<BoardInfo> findAllByBoardName(String boardName,Pageable pageable);
 	
 	@Query("SELECT a.boardName FROM BoardInfo a")
 	public List<String> findBoardNameList();
@@ -22,4 +20,6 @@ public interface BoardRepository extends JpaRepository<BoardInfo, Integer>{
 	
 	@Transactional
 	public void deleteByBoardNameAndBoardIdx(String boardName,int boardIdx);
+	
+	public Long countByBoardName(String boardName);
 }

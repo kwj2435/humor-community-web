@@ -25,7 +25,7 @@ export default {
     .footer{
         background-color: darkgrey;
         width: 100%;
-        height:28vh;
+        height:24vh;
     }
     .footer-ul{
         list-style:none;

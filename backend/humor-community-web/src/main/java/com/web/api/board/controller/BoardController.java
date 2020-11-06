@@ -1,6 +1,7 @@
 package com.web.api.board.controller;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,10 +67,9 @@ public class BoardController {
 	public ResponseEntity<List<BoardInfo>> getBoardContentList(
 			@PathVariable("boardName") String boardName,
 			@RequestParam("currentPage") Integer currentPage,
-			@RequestParam("limit") Integer limit
-			) throws Exception{
+			@RequestParam("limit") Integer limit) throws Exception{
 
-		List<BoardInfo> boardContentList = boardService.getBoardContentList(boardName);
+		List<BoardInfo> boardContentList = boardService.getBoardContentList(boardName,currentPage,limit);
 		
 		return ResponseEntity.ok(boardContentList);
 	}
@@ -77,17 +77,22 @@ public class BoardController {
 	@GetMapping(value = "/{boardName}/list",produces = "application/json; charset=utf8")  //메인 게시판 글 목록
 	public ResponseEntity<List<BoardInfo>> getBoardContentListForMain(
 			@PathVariable("boardName") String boardName,
-			@RequestParam("limitNum") Integer limit){
+			@RequestParam("limitNum") Integer limit) throws Exception{
 		
 		List<BoardInfo> requestResult = boardService.getBoardContentListForMain(boardName,limit);
 		
 		return ResponseEntity.ok(requestResult);
 	}
-	
+	@GetMapping("/{boardName}/rows")	//게시판 글 갯수
+	public ResponseEntity<Map<String,Long>> geteBoardContentCount(@PathVariable("boardName") String boardName) throws Exception{
+		Map<String, Long> resultMap = new HashMap<String,Long>();
+		resultMap.put("rowCount", boardService.getBoardContentCount(boardName));
+		return ResponseEntity.ok(resultMap);
+	}
 	@GetMapping("/{boardName}/{boardIdx}")	//게시판 글 상세정보
 	public ResponseEntity<BoardInfo> getBoardContentDetail(
 			@PathVariable("boardName") String boardName,
-			@PathVariable("boardIdx") Integer boardIdx){
+			@PathVariable("boardIdx") Integer boardIdx) throws Exception{
 		
 		BoardInfo resultBoardInfo = boardService.getBoardContentDetail(boardName, boardIdx);
 		
@@ -95,12 +100,14 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("/{boardName}/{boardIdx}")	//게시판 글 삭제
-	public ResponseEntity<String> deleteBoardContent(
+	public ResponseEntity<Map<String,String>> deleteBoardContent(
 			@PathVariable("boardName") String boardName,
-			@PathVariable("boardIdx") Integer boardIdx){
+			@PathVariable("boardIdx") Integer boardIdx) throws Exception{
 		
+		Map<String,String> resultMap = new HashMap<String,String>();
+		resultMap.put("result", "ok");
 		boardService.deleteBoardContent(boardName, boardIdx);
 		
-		return ResponseEntity.ok("ok");
+		return ResponseEntity.ok(resultMap);
 	}
 }

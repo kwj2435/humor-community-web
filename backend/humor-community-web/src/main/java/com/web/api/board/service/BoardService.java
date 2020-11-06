@@ -31,8 +31,10 @@ public class BoardService {
 		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}
 	public List<BoardInfo> getBoardContentList(String boardName,int currentPage,int limit) throws Exception{
-		PageRequest pageRequest = PageRequest.of(currentPage,limit,Sort.by(Direction.DESC,"boardContentBegin"));
-		return boardRepository.findAllByBoardNameOrderByBoardContentBeginDesc(boardName,pageRequest);
+		
+		Pageable pageAble = PageRequest.of(currentPage - 1,limit,Sort.by(Direction.DESC,"boardContentBegin"));//
+		
+		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}
 	public List<String> getBoardNameList() throws Exception{
 		return boardRepository.findBoardNameList();
@@ -42,5 +44,8 @@ public class BoardService {
 	}
 	public void deleteBoardContent(String boardName,int boardIdx) {
 		boardRepository.deleteByBoardNameAndBoardIdx(boardName, boardIdx);
+	}
+	public Long getBoardContentCount(String boardName) {
+		return boardRepository.countByBoardName(boardName);
 	}
 }

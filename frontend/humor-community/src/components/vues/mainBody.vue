@@ -53,8 +53,8 @@ export default {
       this.getBoardContentList('dandan',13),
       this.getBoardContentList('reading',6),
       this.getBoardContentList('exercise',6),
-      this.getBoardContentList('it',9),
-      this.getBoardContentList('consulting',9)
+      this.getBoardContentList('it',10),
+      this.getBoardContentList('consulting',10)
   },
   methods:{
       getBoardContentList:function(boardName,limit){
