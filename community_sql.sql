@@ -35,4 +35,15 @@ CREATE TABLE tb_file(
 	file_stored_name varchar(100) NOT NULL,
 	file_path VARCHAR(200) NOT NULL,
 	file_begin_date date not null
+);
+DROP TABLE IF EXISTS tb_comment;
+CREATE TABLE tb_comment(
+	comment_idx INT AUTO_INCREMENT PRIMARY KEY,
+	board_idx INT NOT NULL,
+	comment_no INT NOT NULL,
+	comment_depth INT NOT NULL,
+	comment_content VARCHAR(100) NOT NULL,
+	comment_user_email VARCHAR(30) NOT NULL,
+	comment_user_nickname VARCHAR(30) NOT NULL,
+	comment_begin_date DATE NOT null
 )

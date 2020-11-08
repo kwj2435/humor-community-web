@@ -41,7 +41,7 @@
                         <button type="submit" class="btn btn-primary btn-lg">가입</button>
                     </div>
                 </form>
-            <div class="text-center">이미 아이디가 있으신가요? <a href="#">Login here</a></div>
+            <div class="text-center">이미 아이디가 있으신가요? <a v-b-modal.modal-1 href="#">Login here</a></div>
             </div>
         </div>
         <main-footer></main-footer>

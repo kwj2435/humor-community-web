@@ -1,5 +1,5 @@
 <template>
-  <div class="boardDetail">
+  <div class="main">
       <main-header></main-header>
       <boardDetailBody></boardDetailBody>
       <main-footer></main-footer>

@@ -85,8 +85,11 @@ public class BoardController {
 	}
 	@GetMapping("/{boardName}/rows")	//게시판 글 갯수
 	public ResponseEntity<Map<String,Long>> geteBoardContentCount(@PathVariable("boardName") String boardName) throws Exception{
+		
 		Map<String, Long> resultMap = new HashMap<String,Long>();
+		
 		resultMap.put("rowCount", boardService.getBoardContentCount(boardName));
+		
 		return ResponseEntity.ok(resultMap);
 	}
 	@GetMapping("/{boardName}/{boardIdx}")	//게시판 글 상세정보
@@ -105,6 +108,7 @@ public class BoardController {
 			@PathVariable("boardIdx") Integer boardIdx) throws Exception{
 		
 		Map<String,String> resultMap = new HashMap<String,String>();
+		
 		resultMap.put("result", "ok");
 		boardService.deleteBoardContent(boardName, boardIdx);
 		

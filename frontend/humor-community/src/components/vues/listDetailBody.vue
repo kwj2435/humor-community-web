@@ -109,7 +109,7 @@ export default {
       contentList : [],
       fields:[
         { key: 'boardContentTitle', label: '제목', thClass: 'boardTitle'},
-        { key: 'boardContentWriter',label: '글쓴이', thClass: 'boardWriter'},
+        { key: 'boardContentWriter',label: '글쓴이', thClass: 'boardWriter', tdClass:'boardTdWriter'},
         { key: 'boardContentBegin', label: '날짜', thClass: 'boardDate',tdClass:'boardTdDate'},
         { key: 'boardViewCount', label: '조회수', thClass:'boardCount', tdClass:'boardTdCount'}
       ],
@@ -136,6 +136,7 @@ export default {
   font-weight: bold;
 }
 .boardTdDate{
+  width:8vw;
   text-align: center;
 }
 .boardDate{
@@ -145,7 +146,7 @@ export default {
   text-align: center;
 }
 .boardTdCount{
-  width:12vw;
+  width:5vw;
   text-align: center;
 }
 .boardWriter{
@@ -155,5 +156,11 @@ export default {
 .writerBtn{
   float:right;
   margin-right:2vw;
+}
+.boardTitle{
+  width:30vw;
+}
+.boardTdWriter{
+  text-align: center;
 }
 </style>
