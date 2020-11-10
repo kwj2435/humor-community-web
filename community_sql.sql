@@ -9,7 +9,12 @@ CREATE TABLE tb_user(
 	user_nickname VARCHAR(30) NOT NULL,
 	user_roll VARCHAR(10) NOT null
 );
-
+DROP TABLE if EXISTS tb_roll;
+CREATE TABLE tb_roll(
+	roll_idx INT AUTO_INCREMENT PRIMARY KEY,
+	roll_name VARCHAR(10) NOT NULL,
+	roll_description VARCHAR(200)
+)
 DROP TABLE IF EXISTS tb_board_list;
 CREATE TABLE tb_board_list(
 	list_idx INT AUTO_INCREMENT,
@@ -31,6 +36,8 @@ CREATE TABLE tb_board(
 DROP TABLE IF EXISTS tb_file;
 CREATE TABLE tb_file(
 	file_no int AUTO_INCREMENT PRIMARY KEY,
+	board_idx INT NOT NULL,
+	file_status INT NOT NULL,
 	file_original_name varchar(100) not null,
 	file_stored_name varchar(100) NOT NULL,
 	file_path VARCHAR(200) NOT NULL,

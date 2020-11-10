@@ -26,4 +26,12 @@ public class CommentService {
 		
 		return deletedCommentInfo;
 	}
+	public CommentInfo updateComment(int commentIdx, String commentContent) {
+		
+		CommentInfo savedCommentInfo = commentRepository.findByCommentIdx(commentIdx);
+		
+		savedCommentInfo.setCommentContent(commentContent);
+		
+		return commentRepository.save(savedCommentInfo);
+	}
 }

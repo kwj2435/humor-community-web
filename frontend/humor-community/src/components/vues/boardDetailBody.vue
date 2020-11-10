@@ -24,11 +24,17 @@
                     <span class="comment-nickname">{{item.commentUserNickname}}</span>
                     <span class="comment-date">{{item.commentBeginDate}}</span>
                 </div>
-                <p>{{item.commentContent}}</p>
-                <b-form-textarea rows="3" v-model="item.commentContent"></b-form-textarea>
+                <p class="comment-content">{{item.commentContent}}</p>
+                <div :class="item.commentIdx.toString()" style="display:none">
+                    <b-form-textarea rows="3" v-model="item.commentContent"></b-form-textarea>
+                </div>
                 <div class="comment-btn-group">
-                    <b-button class="content-btn" variant="info" @click="modifyContent">수정</b-button>
-                    <b-button class="" variant="danger" @click="deleteComment(item)">삭제</b-button>
+                    <b-button class="content-btn" variant="info" @click="clickModifyBtn(item.commentIdx.toString())">수정</b-button>
+                    <b-button variant="danger" @click="deleteComment(item)">삭제</b-button>
+                </div>
+                <div class="comment-update-btn-group">
+                    <b-button variant="danger" @click="modifyComment(item)">작성</b-button>
+                    <b-button class="content-btn" variant="info" @click="cancelModifyComment(item.commentIdx.toString())">취소</b-button>
                 </div>
             </div>
         </div>
@@ -40,6 +46,7 @@
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+
 export default {
 
     beforeMount(){
@@ -51,7 +58,7 @@ export default {
 
         if(window.sessionStorage.getItem("userEmail") != null){
             this.loginCheck = true;
-            alert($('#goList').attr('class'));
+            //alert($('#goList').attr('class'));
         }
         // Get 게시글 정보
         axios.get("http://localhost:8081/v1/api/board/" + this.boardName + "/" + this.boardIdx)
@@ -71,9 +78,11 @@ export default {
         link:function(){
             this.$router.push("/board/"+this.boardName);
         },
+        /* 게시글 수정 */
         modifyContent:function(){
-
+            this.$router.push("/board/modify/" + this.boardName+"/" + this.boardIdx);
         },
+        /* 게시글 삭제 */
         deleteContent:function(){
             var deleteConfirm = confirm("게시글을 삭제하시겠습니까?");
             if(deleteConfirm == true){
@@ -91,6 +100,7 @@ export default {
                 console.log("fail");
             }
         },
+        /* 댓글 목록 가져오기 */
         getCommentList:function(){
             axios.get("http://localhost:8081/v1/api/comment/" + this.boardIdx)
             .then(res => {
@@ -99,6 +109,7 @@ export default {
                 this.commentLength = res.data.length;
             })
         },
+        /* 댓글 작성*/
         writeComment:function(){
             axios.post("http://localhost:8081/v1/api/comment/",{
                 "boardIdx":this.boardIdx,
@@ -119,12 +130,39 @@ export default {
             .then(res => {
                 if(res.data.result == 1){
                     alert("삭제되었습니다.");
+                    this.getCommentList();
                 }else{
-                    alert("삭제 실패, 관리자 문의 바람");
+                    alert("삭제 실패, 관리자 문의");
                 }
             })
             .catch(err =>{
                 alert("Fail" + err);
+            })
+        },
+        clickModifyBtn:function(commentIdx){
+            $(".comment-content").css("display","none");
+            $(".comment-btn-group").css("display","none");
+            $("." + commentIdx).css("display","block");
+            $(".comment-update-btn-group").css("display","block");
+        },
+        cancelModifyComment:function(commentIdx){
+            $(".comment-content").css("display","block");
+            $(".comment-btn-group").css("display","block");
+            $("." + commentIdx).css("display","none");
+            $(".comment-update-btn-group").css("display","none");
+        },
+        modifyComment:function(item){
+            console.log(item.commentContent);
+            axios.put("http://localhost:8081/v1/api/comment/" + item.commentIdx,
+            {
+                    commentContent:item.commentContent
+            })
+            .then(() => {
+                this.getCommentList();
+                this.cancelModifyComment();
+            })
+            .catch(() =>{
+                alert("Error!");
             })
         }
     }
@@ -184,5 +222,8 @@ export default {
 }
 .board-title{
     margin-top:5vh;
+}
+.comment-update-btn-group{
+    display:none;
 }
 </style>

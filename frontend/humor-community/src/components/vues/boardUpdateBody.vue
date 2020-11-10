@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-      <h2>게시판 글쓰기</h2>
+      <h2>게시판 글 수정</h2>
       <b-form @submit.prevent="contentSubmit()">
         <b-form-group>
         <b-form-input
@@ -15,20 +15,10 @@
           <ckedit :editor="editor" v-model="editorData" :config="editorConfig"/>
         </b-form-group>
         <b-form-group>
-          <b-form-file 
-          multiple 
-          id="files" 
-          v-model="contentFile" 
-          ref="files" 
-          placeholder="파일 첨부" 
-          @change="handleUploadFile">
-          </b-form-file>
+          <b-form-file v-model="contentFile" placeholder="파일 첨부"></b-form-file>
         </b-form-group>
         <b-form-group>
-          <button type="submit" class="btn btn-primary submitBtn">등록</button>
-            <div v-for="(item,index) in fileList" :key="index">
-              <span :id="index">{{item[0].name}}<img class="deleteIcon" src="../../assets/deleteIcon.png" @click="deleteFile(index)"/></span>
-            </div>
+          <button type="button" class="btn btn-primary submitBtn" @click="modifyContent">등록</button>
         </b-form-group>
       </b-form>
   </div>
@@ -39,19 +29,33 @@ import classicEditor from '@ckeditor/ckeditor5-build-classic'
 import CKEditor from '@ckeditor/ckeditor5-vue'
 import UploadAdapter from '../../UploadAdapter'
 import axios from 'axios'
-import $ from 'jquery'
 
 export default {
   name:"CKEditor",
   components:{
     ckedit:CKEditor.component
   },
+  mounted(){
+      axios.get("http://localhost:8081/v1/api/board/" + this.boardName +"/" + this.boardIdx)
+      .then(res => {
+          this.boardInfo = res.data;
+          this.contentTitle = res.data.boardContentTitle;
+          this.editorData = res.data.boardContent;
+          console.log(res);
+      })
+      axios.get("http://localhost:8081/v1/api/file/" + this.boardIdx)
+      .then(res =>{
+        this.fileNo = res.data.fileNo;
+        this.fileName = res.data.fileOriginalName;
+      })
+      .catch()
+  },
   data(){
     return{
       editor : classicEditor,
       contentTitle : '',
       contentWriter : window.sessionStorage.getItem("userNickname"),
-      contentFile : undefined,
+      contentFile : null,
       loginCheck : false,
       editorData : '<p>내용을 입력해주세요.</p>',
       editorConfig:{
@@ -60,16 +64,13 @@ export default {
         extraPlugins: [this.uploader]
       },
       boardName : this.$route.params.boardName,
-      fileList:[],
-      fileCount:0,
+      boardIdx : this.$route.params.boardIdx,
+      boardInfo :'',
+      fileNo : 0,
+      fileName : ''
     }
   },
   methods:{
-    handleUploadFile:function(e){
-      this.fileList[this.fileCount] = e.target.files;
-      this.fileCount += 1;
-      console.log(this.fileList);
-    },
     store()
     {
         // Some code
@@ -81,33 +82,23 @@ export default {
             return new UploadAdapter( loader );
         };
     },
-    contentSubmit:function(){
-      var form = new FormData();
-      form.append('boardContentTitle',this.contentTitle);
-      form.append('boardContent',this.editorData);
-      form.append('boardContentWriter',this.contentWriter);
-      form.append('boardFile',this.fileList);
-      form.append('fileGubun',1);
-
-      console.log(this.fileList);
-      axios.post('http://localhost:8081/v1/api/board/' + this.boardName,form,{
+    modifyContent:function(){
+      axios.put('http://localhost:8081/v1/api/board/' + this.boardName + "/" + this.boardIdx,{
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        boardTitle: this.contentTitle,
+        boardContent: this.editorData
         })
-        .then(() =>{
-          alert("등록되었습니다.");
+        .then(res =>{
+          console.log(res);
+          console.log(this.boardName);
+          alert("수정되었습니다.");
           this.$router.push("/board/" + this.boardName);
         })
-        .catch(err =>{
-          alert("fail");
-          console.log(err);
+        .catch(() =>{
+          alert("실패, 관리자 문의");
         })
-    },
-    deleteFile:function(index){
-      this.fileList[index] = '';
-      console.log(this.fileList[index]);
-      $("#"+index).remove();
     }
   }
 }
@@ -116,10 +107,4 @@ export default {
 <style>
   .ck-editor__editable{height:300px;}
   .submitBtn{float:right;}
-  .deleteIcon{
-    width:20px;
-    height:20px;
-    margin-left:10px;
-    cursor: pointer;
-  }
 </style>

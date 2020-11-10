@@ -6,6 +6,7 @@ import main from './components/view/main'
 import listDetail from './components/view/listDetail'
 import boardWrtie from './components/view/boardWrite'
 import boardDetail from './components/view/boardDetail'
+import boardUpdate from './components/view/boardUpdate'
 
 Vue.use(Router)
 
@@ -36,6 +37,11 @@ export default new Router({
             path:"/board/:boardName/:boardIdx",
             name:"boardDetail",
             component:boardDetail
+        },
+        {
+            path:"/board/modify/:boardName/:boardIdx",
+            name:"boardUpdate",
+            component:boardUpdate
         }
     ]
 })

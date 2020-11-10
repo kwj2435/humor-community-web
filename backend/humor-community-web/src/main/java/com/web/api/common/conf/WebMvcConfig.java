@@ -1,4 +1,4 @@
-package com.web.api.security.conf;
+package com.web.api.common.conf;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

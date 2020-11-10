@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.web.api.board.dto.BoardContentUpdateVO;
 import com.web.api.board.entity.BoardInfo;
 import com.web.api.board.repository.BoardRepository;
 
@@ -47,5 +48,13 @@ public class BoardService {
 	}
 	public Long getBoardContentCount(String boardName) {
 		return boardRepository.countByBoardName(boardName);
+	}
+	public BoardInfo updateBoardContent(String boardName,int boardIdx,BoardContentUpdateVO boardContent) {
+		BoardInfo savedBoardInfo = boardRepository.findByBoardNameAndBoardIdx(boardName, boardIdx);
+		
+		savedBoardInfo.setBoardContentTitle(boardContent.getBoardTitle());
+		savedBoardInfo.setBoardContent(boardContent.getBoardContent());
+		
+		return boardRepository.save(savedBoardInfo);
 	}
 }

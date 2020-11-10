@@ -17,6 +17,10 @@ public class FileInfo {
 	@Column(name = "file_no")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int fileNo;
+	@Column(name = "board_idx")
+	private int boardIdx;
+	@Column(name = "file_status")
+	private int fileStatus;
 	@Column(name = "file_original_name")
 	private String fileOriginalName;
 	@Column(name = "file_stored_name")
@@ -29,6 +33,18 @@ public class FileInfo {
 	@PrePersist
 	private void onCreate() {
 		this.fileBeginDate = new Date();
+	}
+	public int getFileStatus() {
+		return fileStatus;
+	}
+	public void setFileStatus(int fileStatus) {
+		this.fileStatus = fileStatus;
+	}
+	public int getBoardIdx() {
+		return boardIdx;
+	}
+	public void setBoardIdx(int boardIdx) {
+		this.boardIdx = boardIdx;
 	}
 	public int getFileNo() {
 		return fileNo;
