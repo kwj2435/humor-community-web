@@ -28,12 +28,14 @@ public class BoardService {
 		return boardRepository.save(boardInfo);
 	}
 	public List<BoardInfo> getBoardContentListForMain(String boardName,int limitNum){
-		Pageable pageAble = PageRequest.of(0, limitNum);
+		
+		Pageable pageAble = PageRequest.of(0 ,limitNum,Sort.by(Direction.DESC,"boardContentBegin"));
+		
 		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}
 	public List<BoardInfo> getBoardContentList(String boardName,int currentPage,int limit) throws Exception{
 		
-		Pageable pageAble = PageRequest.of(currentPage - 1,limit,Sort.by(Direction.DESC,"boardContentBegin"));//
+		Pageable pageAble = PageRequest.of(currentPage - 1,limit,Sort.by(Direction.DESC,"boardContentBegin"));
 		
 		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}

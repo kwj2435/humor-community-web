@@ -45,10 +45,9 @@ public class BoardController {
 	public ResponseEntity<BoardInfo> postBoardContent(
 			@PathVariable("boardName")String boardName,
 			BoardInfo boardInfo,
-			@RequestParam(value = "boardFile", required = false)List<MultipartFile> file,
+			@RequestParam(value = "boardFile", required = false)MultipartFile[] file,
 			@RequestParam(value = "fileGubun") Integer fileGubun) throws Exception{
 		
-		System.out.println("file"+file);
 		boardInfo.setBoardName(boardName);
 		BoardInfo resultInfo = boardService.postBoardContent(boardInfo);
 		
@@ -134,5 +133,12 @@ public class BoardController {
 		BoardInfo resultBoardInfo = boardService.updateBoardContent(boardName, boardIdx, boardContent);
 		
 		return ResponseEntity.ok(resultBoardInfo);
+	}
+	@ApiOperation("게시판 첨부파일 리스트")
+	@GetMapping("/{boardIdx}/files")
+	public ResponseEntity<List<FileInfo>> getBoardFileList(@PathVariable Integer boardIdx){
+		List<FileInfo> resultFileList = fileService.getFileInfoList(boardIdx);
+		
+		return ResponseEntity.ok(resultFileList);
 	}
 }

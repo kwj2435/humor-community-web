@@ -2,9 +2,9 @@
   <div class="header">
     <div>
       <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand href="/">DanDan.net</b-navbar-brand>
+        <b-navbar-brand href="/"><h4>DanDan.net</h4></b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-collapse id="nav-collapse" is-nav>
+        <b-collapse id="nav-collapse topnav" is-nav>
           <b-navbar-nav>
             <b-nav-item href="/board/dandan">단단한유머</b-nav-item>
             <b-nav-item href="/board/reading">읽을거리 판</b-nav-item>
@@ -23,7 +23,7 @@
             <b-button variant="light" @click="logout()">로그아웃</b-button>
           </div>
           <!-- 로그인 modal S -->
-          <b-modal id="modal-1" title="로그인" hide-footer="true" hide-header="true">
+          <b-modal id="modal-1" title="로그인" hide-footer hide-header>
             <form v-on:submit.prevent="login">
                 <h3>로그인</h3>
                 <div class="form-group">
@@ -105,5 +105,12 @@ export default {
   display:inline-block;
   padding-top:1vh;
   padding-right:1vw;
+}
+.navbar{
+  padding-left:10vw;
+  padding-right:5vw;
+}
+.bg-info{
+  background-color:#3c6cd9 !important;
 }
 </style>

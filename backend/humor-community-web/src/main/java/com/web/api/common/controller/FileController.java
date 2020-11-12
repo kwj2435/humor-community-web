@@ -5,8 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +37,7 @@ public class FileController {
 	@SuppressWarnings("unchecked")
 	@PostMapping("/upload")
 	public JSONObject fileUpload(
-			List<MultipartFile> file,
+			MultipartFile[] file,
 			@RequestBody Integer boardIdx,
 			@RequestBody Integer fileGubun) throws IllegalStateException, IOException {
 		
@@ -42,12 +47,23 @@ public class FileController {
 		fileService.uploadMultiFile(file,boardIdx,fileGubun);
 		return jsonObject;
 	}
-	@ApiOperation("파일 이름 가져오기")
-	@GetMapping("/file/boardIdx")
-	public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable("boardIdx") Integer boardIdx){
+	@ApiOperation("파일 정보 가져오기")
+	@GetMapping("/file/{boardIdx}")
+	public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable Integer boardIdx){
 		
 		FileInfo fileInfo = fileService.getFileInfo(boardIdx);
 		
 		return ResponseEntity.ok(fileInfo);
+	}
+	@ApiOperation("파일 다운로드")
+	@GetMapping("/download/{fileNo}")
+	public ResponseEntity<Resource> fileDownload(@PathVariable Integer fileNo,HttpServletRequest request) throws IOException{
+		String contentType = null;
+		Resource fileResource = fileService.downloadFile(fileNo);
+		contentType = request.getServletContext().getMimeType(fileResource.getFile().getAbsolutePath());
+		
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileResource.getFilename() + "\"")
+				.body(fileResource);
 	}
 }

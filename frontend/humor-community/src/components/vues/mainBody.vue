@@ -121,4 +121,9 @@ tr { line-height: 8px;}
 td{
     cursor: pointer;
 }
+.board-detail > a:hover {
+    text-decoration:none;
+    border-bottom: 2px solid #0a7bff;
+
+}
 </style>

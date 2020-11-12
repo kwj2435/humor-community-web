@@ -16,18 +16,17 @@
         </b-form-group>
         <b-form-group>
           <b-form-file 
-          multiple 
-          id="files" 
-          v-model="contentFile" 
+          multiple
+          id="files"
           ref="files" 
           placeholder="파일 첨부" 
-          @change="handleUploadFile">
+          @change="handleUploadFile($event.target.files)">
           </b-form-file>
         </b-form-group>
         <b-form-group>
           <button type="submit" class="btn btn-primary submitBtn">등록</button>
             <div v-for="(item,index) in fileList" :key="index">
-              <span :id="index">{{item[0].name}}<img class="deleteIcon" src="../../assets/deleteIcon.png" @click="deleteFile(index)"/></span>
+              <span :id="index">{{item.name}}<img class="deleteIcon" src="../../assets/deleteIcon.png" @click="deleteFile(index)"/></span>
             </div>
         </b-form-group>
       </b-form>
@@ -51,7 +50,7 @@ export default {
       editor : classicEditor,
       contentTitle : '',
       contentWriter : window.sessionStorage.getItem("userNickname"),
-      contentFile : undefined,
+      contentFile : [],
       loginCheck : false,
       editorData : '<p>내용을 입력해주세요.</p>',
       editorConfig:{
@@ -65,16 +64,15 @@ export default {
     }
   },
   methods:{
-    handleUploadFile:function(e){
-      this.fileList[this.fileCount] = e.target.files;
+    handleUploadFile:function(files){
+      this.fileList[this.fileCount] = files.item(0);
       this.fileCount += 1;
-      console.log(this.fileList);
+      this.$forceUpdate();
     },
     store()
     {
         // Some code
     },
-
     uploader(editor)
     {
         editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
@@ -83,13 +81,17 @@ export default {
     },
     contentSubmit:function(){
       var form = new FormData();
+
+      for(let i = 0; i < this.fileList.length; i++){
+
+        form.append('boardFile',this.fileList[i]);
+      }
       form.append('boardContentTitle',this.contentTitle);
       form.append('boardContent',this.editorData);
       form.append('boardContentWriter',this.contentWriter);
-      form.append('boardFile',this.fileList);
       form.append('fileGubun',1);
 
-      console.log(this.fileList);
+      console.log("boardFileLog  "+form.get("boardFile"));
       axios.post('http://localhost:8081/v1/api/board/' + this.boardName,form,{
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -100,7 +102,7 @@ export default {
           this.$router.push("/board/" + this.boardName);
         })
         .catch(err =>{
-          alert("fail");
+          alert("실패, 관리자 문의");
           console.log(err);
         })
     },

@@ -1,25 +1,37 @@
 <template>
-  <div class="body">
+  <div class="body board-detail">
       <div class="body-content">
-        <h3><a @click = "link">{{boardNameTitle}}</a></h3>
+        <h4><a @click = "link" href="#">{{boardNameTitle}}</a></h4>
         <div class="content">
             <h4 class="board-title">{{boardTitle}}</h4>
+            <p class="board-nickname">{{boardNickname}}</p>
+            <p>
+                <b-dropdown class="attached-file" text="첨부파일">
+                <b-dropdown-item 
+                v-for="(item,index) in attachedfileList" 
+                :key="index" href="#" 
+                @click="fileDownloadLink(item)">
+                {{item.fileOriginalName}}
+                </b-dropdown-item>
+                </b-dropdown>
+            </p>
                 <div class="content-area" v-html="boardContent">
                 </div>
                 <div class="btn-group">
-                    <b-button class="content-btn" id="goList" variant="info" @click="link">목록</b-button>
                     <b-button v-if="loginCheck" class="content-btn" variant="info" @click="modifyContent">수정</b-button>
                     <b-button v-if="loginCheck" class="content-btn" variant="danger" @click="deleteContent">삭제</b-button>
+                    <b-button class="content-btn" id="goList" variant="info" @click="link">목록</b-button>
                 </div>
         </div>
+        <!-- 댓글 시작-->
         <div  class="comment-wrapper">
             <h3>{{commentLength}} 개의 댓글</h3>
             <div v-if="loginCheck">
                 <b-form-textarea v-model="commentText" rows="3"></b-form-textarea>
                 <b-button  class="comment-btn" variant="info" @click="writeComment">입력</b-button>
-            </div>
+            </div> 
         <div class="comment-content-wrapper">
-            <div v-for="(item,index) in commentList" :key="index">
+            <div v-for="(item,index) in commentList" :key="index" :id="'comment'+index">
                 <div class="comment-info">
                     <span class="comment-nickname">{{item.commentUserNickname}}</span>
                     <span class="comment-date">{{item.commentBeginDate}}</span>
@@ -28,13 +40,14 @@
                 <div :class="item.commentIdx.toString()" style="display:none">
                     <b-form-textarea rows="3" v-model="item.commentContent"></b-form-textarea>
                 </div>
-                <div class="comment-btn-group">
-                    <b-button class="content-btn" variant="info" @click="clickModifyBtn(item.commentIdx.toString())">수정</b-button>
-                    <b-button variant="danger" @click="deleteComment(item)">삭제</b-button>
+                <div v-if="checkCommentUser(item.commentUserNickname)" class="comment-btn-group" >
+                    <a href="" @click="clickModifyBtn('comment'+index,item.commentIdx.toString())">수정</a>
+                    <span> / </span>
+                    <a href="" @click="deleteComment(item)">삭제</a>
                 </div>
-                <div class="comment-update-btn-group">
+                <div v-if="checkCommentUser(item.commentUserNickname)" class="comment-update-btn-group">
                     <b-button variant="danger" @click="modifyComment(item)">작성</b-button>
-                    <b-button class="content-btn" variant="info" @click="cancelModifyComment(item.commentIdx.toString())">취소</b-button>
+                    <b-button variant="info" @click="cancelModifyComment(item.commentIdx.toString())">취소</b-button>
                 </div>
             </div>
         </div>
@@ -49,16 +62,17 @@ import $ from 'jquery'
 
 export default {
 
-    beforeMount(){
+    mounted(){
         if(this.boardName == 'dandan'){ this.boardNameTitle = '단단한유머'}
         else if(this.boardName == 'reading'){ this.boardNameTitle = '읽을거리 판'}
         else if(this.boardName == 'exercise'){ this.boardNameTitle = '운동 판'}
         else if(this.boardName == 'it'){ this.boardNameTitle = 'IT/프로그래밍 판'}
         else if(this.boardName == 'consulting'){ this.boardNameTitle = '고민상담 판'}
 
-        if(window.sessionStorage.getItem("userEmail") != null){
+        if(window.sessionStorage.getItem("userNickname") != null){
             this.loginCheck = true;
-            //alert($('#goList').attr('class'));
+        }else{
+            $(".btn-group").css("margin-left","57vw");
         }
         // Get 게시글 정보
         axios.get("http://localhost:8081/v1/api/board/" + this.boardName + "/" + this.boardIdx)
@@ -66,15 +80,34 @@ export default {
             console.log(res);
             this.boardTitle = res.data.boardContentTitle;
             this.boardContent = res.data.boardContent;
+            this.boardNickname = res.data.boardContentWriter;
         })
         .catch(err => {
             console.log(err);
         })
-
         // Get 댓글 정보
         this.getCommentList();
+        //Get 첨부파일 목록
+        this.getAttachedFileList();
     },
     methods:{
+        checkCommentUser:function(commentNickname){
+            return this.userNickname == commentNickname;
+        },
+        fileDownloadLink:function(item){
+            location.href="http://localhost:8081/v1/api/download/" + item.fileNo;
+        },
+        getAttachedFileList:function(){
+            axios.get("http://localhost:8081/v1/api/board/"+this.boardIdx+"/files")
+            .then(res =>{
+                console.log(res.data);
+                this.attachedfileList = res.data;
+            })
+            .catch(err=>{
+                alert("페이지 로드 실패, 관리자 문의");
+                console.log(err);
+            })
+        },
         link:function(){
             this.$router.push("/board/"+this.boardName);
         },
@@ -139,11 +172,11 @@ export default {
                 alert("Fail" + err);
             })
         },
-        clickModifyBtn:function(commentIdx){
-            $(".comment-content").css("display","none");
-            $(".comment-btn-group").css("display","none");
-            $("." + commentIdx).css("display","block");
-            $(".comment-update-btn-group").css("display","block");
+        clickModifyBtn:function(commentId,commentIdx){
+            $("#"+commentId).children(".comment-content").css("display","none");
+            $("#"+commentId).children(".comment-btn-group").css("display","none");
+            $("#"+commentId).children("." + commentIdx).css("display","block");
+            $("#"+commentId).children(".comment-update-btn-group").css("display","block");
         },
         cancelModifyComment:function(commentIdx){
             $(".comment-content").css("display","block");
@@ -159,7 +192,7 @@ export default {
             })
             .then(() => {
                 this.getCommentList();
-                this.cancelModifyComment();
+                this.cancelModifyComment(item.commentIdx);
             })
             .catch(() =>{
                 alert("Error!");
@@ -177,9 +210,11 @@ export default {
             boardTitle : '',
             boardContent:'',
             boardNameTitle :'',
+            boardNickname:'',
             commentText : '',
             commentList : [],
             commentLength:0,
+            attachedfileList:[],
         }
     }
 }
@@ -217,13 +252,39 @@ export default {
     margin-left : 50vw;
 }
 .content-area{
-    margin-top:3vh;
+    margin-top:9vh;
     min-height: 30vh;
 }
 .board-title{
-    margin-top:5vh;
+    margin-top:6vh;
+    padding-bottom: 4px;
+    margin-bottom: 0px;
+    border-bottom: 2px solid black;
 }
 .comment-update-btn-group{
     display:none;
+}
+.board-nickname{
+    margin-top:-2;
+    padding-top:0;
+    background-color: #CCFFFF;
+    padding-left:5px;
+    margin-bottom: 0;
+}
+.attached-file{
+    float:right;
+    margin-top:1vh;
+}
+.comment-btn-group{
+    margin-left:56vw;
+    margin-bottom: 10px;
+}
+.comment-update-btn-group{
+    margin-left:54vw;
+    margin-bottom: 10px;
+}
+.comment-content{
+    padding-top:1vh;
+    min-height: 10vh;
 }
 </style>
