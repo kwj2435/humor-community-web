@@ -15,7 +15,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.web.api.board.entity.FileInfo;
+import com.web.api.common.entity.FileInfo;
 import com.web.api.common.exception.CustomFileDownloadException;
 import com.web.api.common.exception.CustomFileUploadException;
 import com.web.api.common.repository.FileRepository;

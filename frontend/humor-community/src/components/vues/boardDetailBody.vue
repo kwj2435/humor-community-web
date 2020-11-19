@@ -77,7 +77,6 @@ export default {
         // Get 게시글 정보
         axios.get("http://localhost:8081/v1/api/board/" + this.boardName + "/" + this.boardIdx)
         .then(res => {
-            console.log(res);
             this.boardTitle = res.data.boardContentTitle;
             this.boardContent = res.data.boardContent;
             this.boardNickname = res.data.boardContentWriter;
@@ -89,8 +88,16 @@ export default {
         this.getCommentList();
         //Get 첨부파일 목록
         this.getAttachedFileList();
+        //조회수 증가
+        this.increaseViewCount();
     },
     methods:{
+        increaseViewCount:function(){
+            axios.put("http://localhost:8081://v1/api/" +this.boardName+"/"+this.boardIdx+"/counts")
+            .then(res =>{
+                console.log(res);
+            })
+        },
         checkCommentUser:function(commentNickname){
             return this.userNickname == commentNickname;
         },
@@ -100,7 +107,6 @@ export default {
         getAttachedFileList:function(){
             axios.get("http://localhost:8081/v1/api/board/"+this.boardIdx+"/files")
             .then(res =>{
-                console.log(res.data);
                 this.attachedfileList = res.data;
             })
             .catch(err=>{

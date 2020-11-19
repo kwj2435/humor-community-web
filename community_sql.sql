@@ -17,10 +17,14 @@ CREATE TABLE tb_roll(
 )
 DROP TABLE IF EXISTS tb_board_list;
 CREATE TABLE tb_board_list(
-	list_idx INT AUTO_INCREMENT,
 	board_name VARCHAR(30) NOT NULL PRIMARY KEY,
 	board_description varchar(100)
 );
+INSERT INTO tb_board_list (board_name,board_description) VALUES ("dandan","단단한유머");
+INSERT INTO tb_board_list (board_name,board_description) VALUES ("reading","읽을거리판");
+INSERT INTO tb_board_list (board_name,board_description) VALUES ("exercise","운동판");
+INSERT INTO tb_board_list (board_name,board_description) VALUES ("it","IT/프로그래밍판");
+INSERT INTO tb_board_list (board_name,board_description) VALUES ("consulting","고민상담판");
 
 DROP TABLE IF EXISTS tb_board;
 CREATE TABLE tb_board(

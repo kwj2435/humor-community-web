@@ -86,13 +86,13 @@ export default {
 
         form.append('boardFile',this.fileList[i]);
       }
+      form.append('boardName',this.boardName);
       form.append('boardContentTitle',this.contentTitle);
       form.append('boardContent',this.editorData);
       form.append('boardContentWriter',this.contentWriter);
       form.append('fileGubun',1);
-
-      console.log("boardFileLog  "+form.get("boardFile"));
-      axios.post('http://localhost:8081/v1/api/board/' + this.boardName,form,{
+      console.log(form.get('boardFile'));
+      axios.post('http://localhost:8081/v1/api/board/',form,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }

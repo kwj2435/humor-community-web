@@ -1,4 +1,4 @@
-package com.web.api.board.entity;
+package com.web.api.common.entity;
 
 import java.util.Date;
 

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.web.api.board.entity.FileInfo;
+import com.web.api.common.entity.FileInfo;
 import com.web.api.common.service.FileService;
 
 import io.swagger.annotations.ApiOperation;
@@ -33,9 +33,9 @@ public class FileController {
 	@Autowired
 	private FileService fileService;
 	
-	@ApiOperation("파일 업로드")
+	@ApiOperation("다중 파일 업로드")
 	@SuppressWarnings("unchecked")
-	@PostMapping("/upload")
+	@PostMapping("/multiupload")
 	public JSONObject fileUpload(
 			MultipartFile[] file,
 			@RequestBody Integer boardIdx,
@@ -47,6 +47,7 @@ public class FileController {
 		fileService.uploadMultiFile(file,boardIdx,fileGubun);
 		return jsonObject;
 	}
+	
 	@ApiOperation("파일 정보 가져오기")
 	@GetMapping("/file/{boardIdx}")
 	public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable Integer boardIdx){

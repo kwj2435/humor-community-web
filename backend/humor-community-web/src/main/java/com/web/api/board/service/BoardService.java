@@ -2,6 +2,7 @@ package com.web.api.board.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,16 +11,17 @@ import org.springframework.stereotype.Service;
 
 import com.web.api.board.dto.BoardContentUpdateVO;
 import com.web.api.board.entity.BoardInfo;
+import com.web.api.board.entity.BoardListInfo;
+import com.web.api.board.repository.BoardListRepository;
 import com.web.api.board.repository.BoardRepository;
 
 @Service
 public class BoardService {
 	
+	@Autowired
 	private BoardRepository boardRepository;
-	
-	public BoardService(BoardRepository boardRepository) {
-		this.boardRepository = boardRepository;
-	}
+	@Autowired
+	private BoardListRepository boardListRepository;
 	
 	public BoardInfo postBoardContent(BoardInfo boardInfo) throws Exception{	// 세부 예외처리 필요
 		
@@ -39,8 +41,8 @@ public class BoardService {
 		
 		return boardRepository.findAllByBoardName(boardName,pageAble);
 	}
-	public List<String> getBoardNameList() throws Exception{
-		return boardRepository.findBoardNameList();
+	public List<BoardListInfo> getBoardNameList() throws Exception{
+		return boardListRepository.findAll();
 	}
 	public BoardInfo getBoardContentDetail(String boardName,Integer boardIdx) {
 		return boardRepository.findByBoardNameAndBoardIdx(boardName,boardIdx);
@@ -58,5 +60,11 @@ public class BoardService {
 		savedBoardInfo.setBoardContent(boardContent.getBoardContent());
 		
 		return boardRepository.save(savedBoardInfo);
+	}
+	public void updateBoardViewCount(String boardName,int boardIdx) {
+		BoardInfo savedBoardInfo = boardRepository.findByBoardNameAndBoardIdx(boardName, boardIdx);
+		
+		int savedBoardViewCounts = savedBoardInfo.getBoardViewCount();
+		savedBoardInfo.setBoardViewCount(savedBoardViewCounts + 1);
 	}
 }
