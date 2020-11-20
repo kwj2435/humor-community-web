@@ -27,7 +27,6 @@ public class UserService {
 	}
 	public UserInfo setUserInfo(UserVO userVO) throws IllegalArgumentException{
 		
-		
 		if(userVO.getUserEmail().equals("") || userVO.getUserPassword().equals("")) {
 			throw new IllegalArgumentException();
 		}
@@ -38,5 +37,8 @@ public class UserService {
 		userInfo.setUserRoll("USER");
 		
 		return userRepository.save(userInfo);
+	}
+	public UserInfo checkEmailUseable(String email) {
+		return userRepository.findByUserEmail(email);
 	}
 }

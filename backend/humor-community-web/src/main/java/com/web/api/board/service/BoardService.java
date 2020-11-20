@@ -66,5 +66,7 @@ public class BoardService {
 		
 		int savedBoardViewCounts = savedBoardInfo.getBoardViewCount();
 		savedBoardInfo.setBoardViewCount(savedBoardViewCounts + 1);
+		
+		boardRepository.save(savedBoardInfo);
 	}
 }

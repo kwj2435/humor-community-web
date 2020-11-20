@@ -27,7 +27,7 @@ public class BoardInfo {
 	@Column(name = "board_content_title")
 	private String boardContentTitle;
 	@Lob
-	@Column(name = "board_content")
+	@Column(name = "board_content",length = 100000)
 	private String boardContent;
 	@Column(name = "board_content_writer")
 	private String boardContentWriter;

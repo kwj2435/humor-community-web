@@ -1,5 +1,8 @@
 package com.web.api.user.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +12,11 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.api.security.dto.AuthenticationResponse;
@@ -20,6 +25,8 @@ import com.web.api.security.service.JwtUtilService;
 import com.web.api.user.dto.UserVO;
 import com.web.api.user.entity.UserInfo;
 import com.web.api.user.service.UserService;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/v1/api/user")
@@ -34,12 +41,15 @@ public class UserController {
 	@Autowired
 	private JwtUserDetailsService jwtUserDetailsService;
 	
+	@ApiOperation("회원가입 처리")
 	@PostMapping("/signup")
 	public ResponseEntity<UserInfo> setUserInfo(UserVO userVO) throws IllegalArgumentException{
-		System.out.println(userVO.getUserEmail());
+		
 		UserInfo userInfo = userService.setUserInfo(userVO);
+		
 		return new ResponseEntity<UserInfo>(userInfo,HttpStatus.OK);
 	}
+	@ApiOperation("로그인 처리")
 	@PostMapping("/login")
 	public ResponseEntity<Object> doLogin(UserVO userVO) throws BadCredentialsException,InternalAuthenticationServiceException {
 		try {
@@ -58,5 +68,19 @@ public class UserController {
 		final UserVO responseUserInfo = userService.getUserInfoByUserEmail(userVO.getUserEmail());
 		
 		return ResponseEntity.ok(new AuthenticationResponse(token,responseUserInfo));
+	}
+	@ApiOperation("이메일 중복 확인")
+	@GetMapping("/emailCheck")
+	public ResponseEntity<Map<String,Integer>> checkEmailUseable(@RequestParam("userEmail") String userEmail){
+		System.out.println(userEmail);
+		Map<String,Integer> result = new HashMap<String,Integer>();
+		
+		if(userService.checkEmailUseable(userEmail) != null) {
+			result.put("result", 1);
+		}else {
+			result.put("result", 0);
+		}
+		
+		return ResponseEntity.ok(result);
 	}
 }

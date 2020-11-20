@@ -1,15 +1,19 @@
 package com.web.api.common.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +40,7 @@ public class FileController {
 	@ApiOperation("다중 파일 업로드")
 	@SuppressWarnings("unchecked")
 	@PostMapping("/multiupload")
-	public JSONObject fileUpload(
+	public JSONObject uploadMultiFile(
 			MultipartFile[] file,
 			@RequestBody Integer boardIdx,
 			@RequestBody Integer fileGubun) throws IllegalStateException, IOException {
@@ -47,7 +51,6 @@ public class FileController {
 		fileService.uploadMultiFile(file,boardIdx,fileGubun);
 		return jsonObject;
 	}
-	
 	@ApiOperation("파일 정보 가져오기")
 	@GetMapping("/file/{boardIdx}")
 	public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable Integer boardIdx){
@@ -56,12 +59,21 @@ public class FileController {
 		
 		return ResponseEntity.ok(fileInfo);
 	}
+	@ApiOperation("파일 업로드")
+	@PostMapping("/singleUpload")
+	public byte[] uploadSingleFile() throws IOException {
+		InputStream in = getClass().getResourceAsStream("C:\\upload\\test.jpg");
+	    return IOUtils.toByteArray(in);
+	}
 	@ApiOperation("파일 다운로드")
 	@GetMapping("/download/{fileNo}")
 	public ResponseEntity<Resource> fileDownload(@PathVariable Integer fileNo,HttpServletRequest request) throws IOException{
 		String contentType = null;
 		Resource fileResource = fileService.downloadFile(fileNo);
 		contentType = request.getServletContext().getMimeType(fileResource.getFile().getAbsolutePath());
+		if(contentType == null) {
+			contentType = "application/octet-stream";
+		}
 		
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileResource.getFilename() + "\"")

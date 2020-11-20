@@ -54,6 +54,9 @@ import axios from 'axios'
 
 const storage = window.sessionStorage;
 export default {
+  created(){
+    document.title="DanDan.net";
+  },
   data:function(){
     return{
       userEmail:'',

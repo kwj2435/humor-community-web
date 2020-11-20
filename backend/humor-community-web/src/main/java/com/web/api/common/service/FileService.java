@@ -37,11 +37,14 @@ public class FileService {
 		}
 	}
 	
-	public String uploadMultiFile(MultipartFile[] file,int boardIdx,int fileGubun) throws IllegalStateException, IOException {
+	public void uploadMultiFile(MultipartFile[] file,int boardIdx,int fileGubun) throws IllegalStateException, IOException {
 		UUID uuid = UUID.randomUUID();
 		String fileOriginalName = null;
 		String fileStoredName = null;
 		String filePath = null;
+		
+		System.out.println("file == "+file);
+		if(file == null) { return ; }
 		List<FileInfo> fileList = new ArrayList<FileInfo>();
 		
 		for(int i = 0 ; i < file.length ; i++) {
@@ -62,8 +65,11 @@ public class FileService {
 			file[i].transferTo(new File(FILE_PATH + fileStoredName));
 		}
 		System.out.println(fileList.size());
-		fileRepository.saveAll(fileList);
-		return FILE_PATH + fileStoredName;
+		try {
+			fileRepository.saveAll(fileList);
+		}catch(Exception e) {
+			throw new CustomFileUploadException("파일 업로드 디렉토리 생성 실패.", e);
+		}
 	}
 	public void uploadSingleFile() {
 		
@@ -91,5 +97,20 @@ public class FileService {
 	}
 	public List<FileInfo> getFileInfoList(int boardIdx){
 		return fileRepository.findAllByBoardIdx(boardIdx);
+	}
+	
+	public Resource test() {
+		try {
+			Path filePath = this.fileLocation.resolve("test.jpg").normalize();
+			Resource resource = new UrlResource(filePath.toUri());
+
+			if(resource.exists()) {
+				return resource;
+			}else {
+				throw new CustomFileDownloadException("파일을 찾을 수 없습니다.");
+			}
+		}catch(Exception e) {
+			throw new CustomFileDownloadException("파일을 찾을 수 없습니다.",e);
+		}
 	}
 }

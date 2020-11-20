@@ -17,6 +17,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-paper-plane"></i></span>
                             <input type="email" v-model="userEmail" class="form-control" name="email" placeholder="Email Address" required="required">
+                            <b-button @click="checkEmail">중복확인</b-button>
                         </div>
                     </div>
                     <div class="form-group">
@@ -61,12 +62,31 @@ export default {
     return {
         userEmail:'',
         userPassword:'',
-        userNickname:''
+        userNickname:'',
+        emailCheck:false
     }
   },
   methods:{
+      checkEmail:function(){
+          axios.get('http://localhost:8081/v1/api/user/emailCheck',{
+              params:{
+                  userEmail:this.userEmail
+              }
+          })
+          .then(res =>{
+              console.log(res);
+          })
+          .catch(()=>{
+              console.log("error");
+          })
+      },
       signup:function(){
           var form = new FormData();
+
+          if(this.emailCheck == false){
+              alert("이메일 중복검사 필요!");
+              return;
+          }
           form.append('userNickname',this.userNickname);
           form.append('userEmail',this.userEmail);
           form.append('userPassword',this.userPassword);

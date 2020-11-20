@@ -10,6 +10,9 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^23.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
+    "@toast-ui/editor": "^2.5.0",
+    "@toast-ui/editor-plugin-code-syntax-highlight": "^1.0.0",
+    "@toast-ui/vue-editor": "^2.5.0",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.18.0",
@@ -17,6 +20,7 @@
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
     "vue": "^2.6.12",
+    "vue-meta": "^2.4.0",
     "vue-router": "^3.4.7"
   },
   "devDependencies": {

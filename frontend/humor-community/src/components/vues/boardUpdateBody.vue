@@ -12,7 +12,7 @@
         ></b-form-input>
         </b-form-group>
         <b-form-group>
-          <ckedit :editor="editor" v-model="editorData" :config="editorConfig"/>
+          <editor height="400px" initialEditType="wysiwyg" ref="editorRef" v-if="editorData != null" :initialValue="editorData"/>
         </b-form-group>
         <b-form-group>
           <b-form-file v-model="contentFile" placeholder="파일 첨부"></b-form-file>
@@ -25,15 +25,14 @@
 </template>
 
 <script>
-import classicEditor from '@ckeditor/ckeditor5-build-classic'
-import CKEditor from '@ckeditor/ckeditor5-vue'
-import UploadAdapter from '../../UploadAdapter'
 import axios from 'axios'
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/vue-editor';
 
 export default {
-  name:"CKEditor",
   components:{
-    ckedit:CKEditor.component
+    "editor":Editor
   },
   mounted(){
       axios.get("http://localhost:8081/v1/api/board/" + this.boardName +"/" + this.boardIdx)
@@ -52,17 +51,11 @@ export default {
   },
   data(){
     return{
-      editor : classicEditor,
       contentTitle : '',
       contentWriter : window.sessionStorage.getItem("userNickname"),
       contentFile : null,
       loginCheck : false,
-      editorData : '<p>내용을 입력해주세요.</p>',
-      editorConfig:{
-        height:'500px',
-        language:'ko',
-        extraPlugins: [this.uploader]
-      },
+      editorData : null,
       boardName : this.$route.params.boardName,
       boardIdx : this.$route.params.boardIdx,
       boardInfo :'',
@@ -71,28 +64,17 @@ export default {
     }
   },
   methods:{
-    store()
-    {
-        // Some code
-    },
-
-    uploader(editor)
-    {
-        editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-            return new UploadAdapter( loader );
-        };
-    },
     modifyContent:function(){
+      var boardContent = this.$refs.editorRef.invoke("getMarkdown");
+
       axios.put('http://localhost:8081/v1/api/board/' + this.boardName + "/" + this.boardIdx,{
         headers: {
           'Content-Type': 'multipart/form-data'
         },
         boardTitle: this.contentTitle,
-        boardContent: this.editorData
+        boardContent:boardContent
         })
-        .then(res =>{
-          console.log(res);
-          console.log(this.boardName);
+        .then(() =>{
           alert("수정되었습니다.");
           this.$router.push("/board/" + this.boardName);
         })

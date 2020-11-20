@@ -23,14 +23,18 @@ export default class UploadAdapter {
 
     // Initializes the XMLHttpRequest object using the URL passed to the constructor.
     _initRequest() {
+        console.log("initRequest");
         const xhr = this.xhr = new XMLHttpRequest();
 
-        xhr.open( 'POST', 'http://localhost:8081/v1/api/upload/', true );
+        xhr.open( 'POST', 'http://localhost:8081/v1/api/singleUpload/', true );
         xhr.responseType = 'json';
     }
 
     // Initializes XMLHttpRequest listeners.
     _initListeners( resolve, reject, file ) {
+        console.log("initListener");
+        console.log("resolve" + resolve);
+        console.log("file" + file);
         const xhr = this.xhr;
         const loader = this.loader;
         const genericErrorText = `Couldn't upload file: ${ file.name }.`;

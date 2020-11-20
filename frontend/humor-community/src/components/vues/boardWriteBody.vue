@@ -12,7 +12,7 @@
         ></b-form-input>
         </b-form-group>
         <b-form-group>
-          <ckedit :editor="editor" v-model="editorData" :config="editorConfig"/>
+          <editor height="400px" initialEditType="wysiwyg" ref="editorRef"/>
         </b-form-group>
         <b-form-group>
           <b-form-file 
@@ -34,30 +34,27 @@
 </template>
 
 <script>
-import classicEditor from '@ckeditor/ckeditor5-build-classic'
-import CKEditor from '@ckeditor/ckeditor5-vue'
-import UploadAdapter from '../../UploadAdapter'
 import axios from 'axios'
 import $ from 'jquery'
 
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/vue-editor';
+
+
 export default {
-  name:"CKEditor",
   components:{
-    ckedit:CKEditor.component
+    'editor':Editor
+  },
+  mounted(){
+   // $(".wysiwyg").trigger('click');
   },
   data(){
     return{
-      editor : classicEditor,
       contentTitle : '',
       contentWriter : window.sessionStorage.getItem("userNickname"),
       contentFile : [],
       loginCheck : false,
-      editorData : '<p>내용을 입력해주세요.</p>',
-      editorConfig:{
-        height:'500px',
-        language:'ko',
-        extraPlugins: [this.uploader]
-      },
       boardName : this.$route.params.boardName,
       fileList:[],
       fileCount:0,
@@ -69,29 +66,21 @@ export default {
       this.fileCount += 1;
       this.$forceUpdate();
     },
-    store()
-    {
-        // Some code
-    },
-    uploader(editor)
-    {
-        editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
-            return new UploadAdapter( loader );
-        };
-    },
     contentSubmit:function(){
       var form = new FormData();
+      var content = this.$refs.editorRef.invoke("getMarkdown");
 
-      for(let i = 0; i < this.fileList.length; i++){
-
+      if(this.fileCount == 0){
+        form.append('boardFile',null);
+      }
+        for(let i = 0; i < this.fileList.length; i++){
         form.append('boardFile',this.fileList[i]);
       }
       form.append('boardName',this.boardName);
       form.append('boardContentTitle',this.contentTitle);
-      form.append('boardContent',this.editorData);
+      form.append('boardContent',content);
       form.append('boardContentWriter',this.contentWriter);
       form.append('fileGubun',1);
-      console.log(form.get('boardFile'));
       axios.post('http://localhost:8081/v1/api/board/',form,{
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -116,7 +105,6 @@ export default {
 </script>
 
 <style>
-  .ck-editor__editable{height:300px;}
   .submitBtn{float:right;}
   .deleteIcon{
     width:20px;

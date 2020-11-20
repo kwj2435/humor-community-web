@@ -31,11 +31,12 @@ CREATE TABLE tb_board(
 	board_idx INT AUTO_INCREMENT PRIMARY KEY,
 	board_name VARCHAR(30) NOT NULL,             # 게시판 이름
 	board_content_title VARCHAR(200) NOT NULL,	# 게시글 제목
-	board_content TEXT NOT NULL,					   # 게시글 내용
+	board_content blob NOT NULL,					   # 게시글 내용
 	board_content_writer VARCHAR(30) NOT NULL,   # 게시글 작성자
 	board_content_begin DATE NOT NULL,            # 작성일
 	board_view_count INT NOT NULL                # 조회수
 );
+
 
 DROP TABLE IF EXISTS tb_file;
 CREATE TABLE tb_file(
@@ -58,3 +59,35 @@ CREATE TABLE tb_comment(
 	comment_user_nickname VARCHAR(30) NOT NULL,
 	comment_begin_date DATE NOT null
 )
+
+/* 테스트용 임시  데이터 */
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("dandan","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);
+INSERT INTO tb_board (board_name,board_content_title,board_content,board_content_writer,board_content_begin,board_view_count)
+VALUES("it","더미데이터","더미데이터","더미",99991120,0);

@@ -15,13 +15,14 @@
                 </b-dropdown-item>
                 </b-dropdown>
             </p>
-                <div class="content-area" v-html="boardContent">
-                </div>
-                <div class="btn-group">
-                    <b-button v-if="loginCheck" class="content-btn" variant="info" @click="modifyContent">수정</b-button>
-                    <b-button v-if="loginCheck" class="content-btn" variant="danger" @click="deleteContent">삭제</b-button>
-                    <b-button class="content-btn" id="goList" variant="info" @click="link">목록</b-button>
-                </div>
+            <div class="content-area">
+                <viewer v-if="boardContent != null" :initialValue="boardContent" />
+            </div>
+        </div>
+        <div class="btn-group">
+            <b-button v-if="loginCheck" class="content-btn" variant="info" @click="modifyContent">수정</b-button>
+            <b-button v-if="loginCheck" class="content-btn" variant="danger" @click="deleteContent">삭제</b-button>
+            <b-button class="content-btn" id="goList" variant="info" @click="link">목록</b-button>
         </div>
         <!-- 댓글 시작-->
         <div  class="comment-wrapper">
@@ -52,16 +53,21 @@
             </div>
         </div>
         </div>
-      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import $ from 'jquery'
+import "@toast-ui/editor/dist/toastui-editor.css";
+import 'highlight.js/styles/github.css';
+import { Viewer } from '@toast-ui/vue-editor'
 
 export default {
-
+    components:{
+        "viewer":Viewer 
+    },
     mounted(){
         if(this.boardName == 'dandan'){ this.boardNameTitle = '단단한유머'}
         else if(this.boardName == 'reading'){ this.boardNameTitle = '읽을거리 판'}
@@ -93,9 +99,11 @@ export default {
     },
     methods:{
         increaseViewCount:function(){
-            axios.put("http://localhost:8081://v1/api/" +this.boardName+"/"+this.boardIdx+"/counts")
-            .then(res =>{
-                console.log(res);
+            axios.put("http://localhost:8081/v1/api/board/" +this.boardName+"/"+this.boardIdx+"/counts")
+            .then(() =>{
+            })
+            .catch(err=>{
+                console.log(err);
             })
         },
         checkCommentUser:function(commentNickname){
@@ -107,7 +115,7 @@ export default {
         getAttachedFileList:function(){
             axios.get("http://localhost:8081/v1/api/board/"+this.boardIdx+"/files")
             .then(res =>{
-                this.attachedfileList = res.data;
+                this.attachedfileList = res.data.content;
             })
             .catch(err=>{
                 alert("페이지 로드 실패, 관리자 문의");
@@ -214,13 +222,14 @@ export default {
             boardName : this.$route.params.boardName,
             boardIdx : this.$route.params.boardIdx,
             boardTitle : '',
-            boardContent:'',
+            boardContent:null,
             boardNameTitle :'',
             boardNickname:'',
             commentText : '',
             commentList : [],
             commentLength:0,
             attachedfileList:[],
+            viewerText:"123123123123",
         }
     }
 }
@@ -292,5 +301,8 @@ export default {
 .comment-content{
     padding-top:1vh;
     min-height: 10vh;
+}
+Viewer{
+    height:300px;
 }
 </style>

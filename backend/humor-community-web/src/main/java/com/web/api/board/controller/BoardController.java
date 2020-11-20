@@ -52,9 +52,9 @@ public class BoardController {
 			@RequestParam(value = "fileGubun") Integer fileGubun) throws Exception{
 		
 		BoardInfo resultInfo = boardService.postBoardContent(boardInfo);
-		
-		System.out.println(file);
-		if(file != null) {
+		if(file.length != 0) {
+			System.out.println(file.length != 0);
+			System.out.println("in");
 			fileService.uploadMultiFile(file,resultInfo.getBoardIdx(),fileGubun);
 		}
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -63,9 +63,7 @@ public class BoardController {
 				.toUri();
 		
 		EntityModel<BoardInfo> resource = EntityModel.of(resultInfo)
-				.add(linkTo(methodOn(BoardController.class).postBoardContent(boardInfo, file, fileGubun)).withSelfRel())
-				.add(linkTo(methodOn(BoardController.class)
-						.getBoardContentDetail(boardInfo.getBoardName(), resultInfo.getBoardIdx())).withRel("contentDetail"));
+				.add(linkTo(methodOn(BoardController.class).getBoardContentDetail(boardInfo.getBoardName(), resultInfo.getBoardIdx())).withRel("contentDetail"));
 		
 		return ResponseEntity.created(uri).body(resource);
 	}
