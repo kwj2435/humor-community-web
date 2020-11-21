@@ -20,11 +20,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.web.api.board.entity.CommentInfo;
 import com.web.api.board.service.CommentService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/v1/api/comment/")
+@Api(value="CommentController V1")
 public class CommentController {
 	
 	@Autowired

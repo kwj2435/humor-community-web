@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                            <input type="text" v-model="userPassword" class="form-control" name="password" placeholder="Password" required="required">
+                            <input type="password" v-model="userPassword" class="form-control" name="password" placeholder="Password" required="required">
                         </div>
                     </div>
                     <div class="form-group">
@@ -32,7 +32,7 @@
                                 <i class="fa fa-lock"></i>
                                 <i class="fa fa-check"></i>
                             </span>
-                            <input type="text" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
                         </div>
                     </div>
                     <div class="form-group">
@@ -62,19 +62,29 @@ export default {
     return {
         userEmail:'',
         userPassword:'',
+        checkUserPassword:'',
         userNickname:'',
-        emailCheck:false
+        emailCheck : false,
     }
   },
   methods:{
       checkEmail:function(){
+          if(this.userEmail.length <6){ 
+              alert("Email을 다시 입력해주세요.");
+              return;
+          }
           axios.get('http://localhost:8081/v1/api/user/emailCheck',{
               params:{
                   userEmail:this.userEmail
               }
           })
           .then(res =>{
-              console.log(res);
+              if(res.data.result == 0){ 
+                  this.emailCheck = true;
+                  alert("사용가능한 Email 입니다!");
+              }else{
+                  alert("이미 존재하는 Email 입니다.");
+              }
           })
           .catch(()=>{
               console.log("error");
@@ -84,9 +94,19 @@ export default {
           var form = new FormData();
 
           if(this.emailCheck == false){
-              alert("이메일 중복검사 필요!");
+              alert("Email 중복검사 필요!");
+              return;
+          }else if(this.userEmail.length < 6){
+              alert("Email을 다시 입력해주세요!");
+              return;
+          }else if(this.userPassword.length > 8){
+              alert("패스워드의 길이는 9자 이상입니다.");
+              return;
+          }else if(this.userPassword != this.checkUserPassword){
+              alert("패스워드가 일치하지 않습니다.");
               return;
           }
+
           form.append('userNickname',this.userNickname);
           form.append('userEmail',this.userEmail);
           form.append('userPassword',this.userPassword);

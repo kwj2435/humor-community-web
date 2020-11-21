@@ -28,14 +28,15 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.api.common.entity.FileInfo;
 import com.web.api.common.service.FileService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/v1/api/")
+@Api(value="FileController V1")
 public class FileController {
 	
-	@Autowired
-	private FileService fileService;
+	@Autowired private FileService fileService;
 	
 	@ApiOperation("다중 파일 업로드")
 	@SuppressWarnings("unchecked")

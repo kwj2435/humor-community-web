@@ -18,10 +18,8 @@ import com.web.api.board.repository.BoardRepository;
 @Service
 public class BoardService {
 	
-	@Autowired
-	private BoardRepository boardRepository;
-	@Autowired
-	private BoardListRepository boardListRepository;
+	@Autowired private BoardRepository boardRepository;
+	@Autowired private BoardListRepository boardListRepository;
 	
 	public BoardInfo postBoardContent(BoardInfo boardInfo) throws Exception{	// 세부 예외처리 필요
 		

@@ -26,20 +26,18 @@ import com.web.api.user.dto.UserVO;
 import com.web.api.user.entity.UserInfo;
 import com.web.api.user.service.UserService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/v1/api/user")
+@Api(value="UserController V1")
 public class UserController {
 	
-	@Autowired
-	AuthenticationManager authenticationManager;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private JwtUtilService jwtUtilService; 
-	@Autowired
-	private JwtUserDetailsService jwtUserDetailsService;
+	@Autowired AuthenticationManager authenticationManager;
+	@Autowired private UserService userService;
+	@Autowired private JwtUtilService jwtUtilService; 
+	@Autowired private JwtUserDetailsService jwtUserDetailsService;
 	
 	@ApiOperation("회원가입 처리")
 	@PostMapping("/signup")
