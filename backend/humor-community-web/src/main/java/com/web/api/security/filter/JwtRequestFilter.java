@@ -26,10 +26,11 @@ public class JwtRequestFilter extends OncePerRequestFilter{
 	// 3. Jwt 미존재시 로그인 절차 이후 토큰 발행
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,FilterChain filterChain) throws ServletException,IOException{
-		final String token = request.getHeader("X-AUTO-TOKEN");
+		final String accessToken = request.getHeader("X-AUTO-ACCESSTOKEN");
+		final String refreshToken = request.getHeader("X-AUTO-REFRESHTOKEN");
 		
-		if (token != null) {
-            Authentication authentication = jwtUtilService.getAuthentication(token);
+		if (accessToken != null) {
+            Authentication authentication = jwtUtilService.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 		//발행된 Authentication을 가지고 Manager로 넘겨서 검증절차를 진행한다.

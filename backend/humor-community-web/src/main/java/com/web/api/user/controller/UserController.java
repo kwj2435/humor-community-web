@@ -62,10 +62,11 @@ public class UserController {
 		}
 	
 		final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userVO.getUserEmail());
-		final String token = jwtUtilService.createToken(userDetails.getUsername(),"USER");	//유저이름, 권한List를 파라미터로 넣음
+		final String accessToken = jwtUtilService.createAccessToken(userDetails.getUsername(),"USER");	//유저이름, 권한List를 파라미터로 넣음
+		final String refreshToken = jwtUtilService.createRefreshToken(userDetails.getUsername(),"USER");
 		final UserVO responseUserInfo = userService.getUserInfoByUserEmail(userVO.getUserEmail());
 		
-		return ResponseEntity.ok(new AuthenticationResponse(token,responseUserInfo));
+		return ResponseEntity.ok(new AuthenticationResponse(accessToken,refreshToken,responseUserInfo));
 	}
 	@ApiOperation("이메일 중복 확인")
 	@GetMapping("/emailCheck")

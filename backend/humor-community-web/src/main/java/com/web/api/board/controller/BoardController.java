@@ -58,18 +58,18 @@ public class BoardController {
 	})
 	@PostMapping("/")
 	public ResponseEntity<BoardInfo> postBoardContent(
-			BoardInfo boardInfo,
-			@RequestParam(value = "boardFile", required = false)MultipartFile[] file,
-			@RequestParam(value = "fileGubun") Integer fileGubun) throws Exception{
+	    BoardInfo boardInfo,
+	    @RequestParam(value = "boardFile", required = false)MultipartFile[] file,
+	    @RequestParam(value = "fileGubun") Integer fileGubun) throws Exception{
 		
-		BoardInfo resultInfo = boardService.postBoardContent(boardInfo);
-		if(file.length != 0) {
-			fileService.uploadMultiFile(file,resultInfo.getBoardIdx(),fileGubun);
+	    BoardInfo resultInfo = boardService.postBoardContent(boardInfo);
+	    if(file.length != 0) {
+	        fileService.uploadMultiFile(file,resultInfo.getBoardIdx(),fileGubun);
 		}
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(resultInfo.getBoardIdx())
-				.toUri();
+	    URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+	        .path("/{id}")
+			.buildAndExpand(resultInfo.getBoardIdx())
+			.toUri();
 		
 		return ResponseEntity.created(uri).body(resultInfo);
 	}
@@ -81,8 +81,8 @@ public class BoardController {
 	 */
 	@ApiOperation(value = "게시판 목록 리스트",notes = "사용중인 게시판 목록을 가져옵니다.")
 	@ApiResponses(value= {
-			@ApiResponse(code = 201,message = "success search list"),
-			@ApiResponse(code = 400,message = "no content")
+	    @ApiResponse(code = 201,message = "success search list"),
+	    @ApiResponse(code = 400,message = "no content")
 	})
 	@GetMapping("/list")	//게시판 목록
 	public ResponseEntity<List<BoardListInfo>> getBoardList() throws Exception{
@@ -105,18 +105,14 @@ public class BoardController {
 	 */
 	@ApiOperation("게시판 글 목록")
 	@GetMapping("/{boardName}")	//게시판 글 목록
-	public ResponseEntity<CollectionModel<BoardInfo>> getBoardContentList(
+	public ResponseEntity<List<BoardInfo>> getBoardContentList(
 			@PathVariable("boardName") String boardName,
 			@RequestParam("currentPage") Integer currentPage,
 			@RequestParam("limit") Integer limit) throws Exception{
 
 		List<BoardInfo> boardContentList = boardService.getBoardContentList(boardName,currentPage,limit);
 		
-		CollectionModel<BoardInfo> resource = CollectionModel
-				.of(boardContentList)
-				.add(linkTo(methodOn(BoardController.class).getBoardList()).withSelfRel());
-		
-		return ResponseEntity.ok(resource);
+		return ResponseEntity.ok(boardContentList);
 	}
 	
 	/**
