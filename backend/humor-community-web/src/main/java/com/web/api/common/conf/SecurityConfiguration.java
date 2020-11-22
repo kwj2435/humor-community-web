@@ -28,9 +28,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST).hasAuthority("ROLE_USER")
-                .antMatchers(HttpMethod.PUT).hasAuthority("ROLE_USER")
-                .antMatchers(HttpMethod.DELETE).hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.POST,"/board").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PUT,"/board").hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE,"/board").hasAuthority("ROLE_USER")
                 .antMatchers("/user").authenticated()
                 .anyRequest().permitAll()
                 .and()

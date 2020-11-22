@@ -40,7 +40,6 @@ export default {
           this.boardInfo = res.data;
           this.contentTitle = res.data.boardContentTitle;
           this.editorData = res.data.boardContent;
-          console.log(res);
       })
       axios.get("http://localhost:8081/v1/api/file/" + this.boardIdx)
       .then(res =>{

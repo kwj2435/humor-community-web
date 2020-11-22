@@ -33,6 +33,8 @@ public class BoardInfo {
     private String boardContentWriter;
     @Column(name = "board_view_count")
     private int boardViewCount;
+    @Column(name = "board_recommand_count")
+    private int boardRecommandCount;
     @Column(name = "board_content_begin")
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -97,6 +99,14 @@ public class BoardInfo {
 
     public void setBoardViewCount(int boardViewCount) {
         this.boardViewCount = boardViewCount;
+    }
+    
+    public int getBoardRecommandCount() {
+        return boardRecommandCount;
+    }
+
+    public void setBoardRecommandCount(int boardRecommandCount) {
+        this.boardRecommandCount = boardRecommandCount;
     }
 
 }

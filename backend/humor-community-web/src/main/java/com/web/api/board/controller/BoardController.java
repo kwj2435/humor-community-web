@@ -248,4 +248,44 @@ public class BoardController {
 
         return ResponseEntity.ok(resultMap);
     }
+    
+    /**
+     * 게시글 추천수 증가
+     * @param boardName
+     * @param boardIdx
+     * @return
+     */
+    @ApiOperation("게시글 추천수 증가")
+    @PutMapping("/{boardName}/{boardIdx}/recommands")
+    public ResponseEntity<Map<String,String>> increaseRecommandCount(
+            @PathVariable String boardName,
+            @PathVariable Integer boardIdx){
+        
+        Map<String, String> resultMap = new HashMap<String, String>();
+
+        boardService.updateBoardRecommandCount(boardName, boardIdx);
+        resultMap.put("result", "ok");
+
+        return ResponseEntity.ok(resultMap);
+    }
+    
+    /**
+     * 게시글 추천수 조회
+     * @param boardName
+     * @param boardIdx
+     * @return
+     */
+    @ApiOperation("게시글 추천수 조회")
+    @GetMapping("/{boardName}/{boardIdx}/recommands")
+    public ResponseEntity<Map<String,Integer>> getBoardRecommandCount(
+            @PathVariable String boardName,
+            @PathVariable Integer boardIdx){
+        
+        Map<String, Integer> resultMap = new HashMap<String, Integer>();
+
+        int result = boardService.getBoardRecommandCount(boardName, boardIdx);
+        resultMap.put("result", result);
+
+        return ResponseEntity.ok(resultMap);
+    }
 }

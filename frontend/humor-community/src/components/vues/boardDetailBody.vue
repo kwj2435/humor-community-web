@@ -19,6 +19,9 @@
                 <viewer v-if="boardContent != null" :initialValue="boardContent" />
             </div>
         </div>
+        <div style="text-align:center">
+            <b-button pill variant="outline-secondary" @click="increaseRecommand" >추천하기 {{recommandCount}}</b-button>
+        </div>
         <div class="btn-group">
             <b-button v-if="loginCheck" class="content-btn" variant="info" @click="modifyContent">수정</b-button>
             <b-button v-if="loginCheck" class="content-btn" variant="danger" @click="deleteContent">삭제</b-button>
@@ -86,6 +89,7 @@ export default {
             this.boardTitle = res.data.boardContentTitle;
             this.boardContent = res.data.boardContent;
             this.boardNickname = res.data.boardContentWriter;
+            this.recommandCount = res.data.boardRecommandCount;
         })
         .catch(err => {
             console.log(err);
@@ -98,6 +102,26 @@ export default {
         this.increaseViewCount();
     },
     methods:{
+        increaseRecommand:function(){
+            if(this.userEmail == null){
+                alert("로그인이 필요합니다!");
+                return;
+            }
+            axios.put("http://localhost:8081/v1/api/board/" +this.boardName+"/"+this.boardIdx+"/recommands")
+            .then(() =>{
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+            axios.get("http://localhost:8081/v1/api/board/" +this.boardName+"/"+this.boardIdx+"/recommands")
+            .then(res=>{
+                this.recommandCount = res.data.result;
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+            location.reload();
+        },
         increaseViewCount:function(){
             axios.put("http://localhost:8081/v1/api/board/" +this.boardName+"/"+this.boardIdx+"/counts")
             .then(() =>{
@@ -230,6 +254,7 @@ export default {
             commentLength:0,
             attachedfileList:[],
             viewerText:"123123123123",
+            recommandCount:0
         }
     }
 }

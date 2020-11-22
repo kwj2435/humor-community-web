@@ -25,8 +25,6 @@ public class BoardService {
 
     public BoardInfo postBoardContent(BoardInfo boardInfo) throws Exception { // 세부 예외처리 필요
 
-        boardInfo.setBoardViewCount(0); // 초기 조회수 세팅
-
         return boardRepository.save(boardInfo);
     }
 
@@ -76,5 +74,20 @@ public class BoardService {
         savedBoardInfo.setBoardViewCount(savedBoardViewCounts + 1);
 
         boardRepository.save(savedBoardInfo);
+    }
+    
+    public void updateBoardRecommandCount(String boardName, int boardIdx) {
+        BoardInfo savedBoardInfo = boardRepository.findByBoardNameAndBoardIdx(boardName, boardIdx);
+
+        int savedBoardRecommandCount = savedBoardInfo.getBoardRecommandCount();
+        savedBoardInfo.setBoardRecommandCount(savedBoardRecommandCount + 1);
+        
+        boardRepository.save(savedBoardInfo);
+    }
+    
+    public int getBoardRecommandCount(String boardName, int boardIdx) {
+        BoardInfo savedBoardInfo = boardRepository.findByBoardNameAndBoardIdx(boardName, boardIdx);
+        
+        return savedBoardInfo.getBoardRecommandCount();
     }
 }

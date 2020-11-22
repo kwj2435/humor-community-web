@@ -32,7 +32,7 @@
                                 <i class="fa fa-lock"></i>
                                 <i class="fa fa-check"></i>
                             </span>
-                            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+                            <input type="password" v-model="checkUserPassword" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
                         </div>
                     </div>
                     <div class="form-group">
@@ -99,7 +99,7 @@ export default {
           }else if(this.userEmail.length < 6){
               alert("Email을 다시 입력해주세요!");
               return;
-          }else if(this.userPassword.length > 8){
+          }else if(this.userPassword.length < 8){
               alert("패스워드의 길이는 9자 이상입니다.");
               return;
           }else if(this.userPassword != this.checkUserPassword){
