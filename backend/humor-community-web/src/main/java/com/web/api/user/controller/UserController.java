@@ -3,6 +3,8 @@ package com.web.api.user.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.api.common.service.RedisUtilService;
 import com.web.api.security.dto.AuthenticationResponse;
 import com.web.api.security.service.JwtUserDetailsService;
 import com.web.api.security.service.JwtUtilService;
@@ -42,6 +45,8 @@ public class UserController {
     private JwtUtilService jwtUtilService;
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
+    @Autowired
+    private RedisUtilService redisUtilService;
 
     /**
      * 회원가입
@@ -69,7 +74,7 @@ public class UserController {
      */
     @ApiOperation("로그인 처리")
     @PostMapping("/login")
-    public ResponseEntity<Object> doLogin(UserVO userVO)
+    public ResponseEntity<Object> doLogin(UserVO userVO,HttpServletResponse response)
             throws BadCredentialsException, InternalAuthenticationServiceException {
         try {
             authenticationManager.authenticate(
@@ -84,11 +89,12 @@ public class UserController {
         }
 
         final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(userVO.getUserEmail());
-        final String accessToken = jwtUtilService.createAccessToken(userDetails.getUsername(), "USER"); // 유저이름, 권한List를
-                                                                                                        // 파라미터로 넣음
+        final String accessToken = jwtUtilService.createAccessToken(userDetails.getUsername(), "USER");
         final String refreshToken = jwtUtilService.createRefreshToken(userDetails.getUsername(), "USER");
         final UserVO responseUserInfo = userService.getUserInfoByUserEmail(userVO.getUserEmail());
 
+        response.setHeader("accessToken", accessToken);
+        response.setHeader("refreshToken", refreshToken);
         return ResponseEntity.ok(new AuthenticationResponse(accessToken, refreshToken, responseUserInfo));
     }
 

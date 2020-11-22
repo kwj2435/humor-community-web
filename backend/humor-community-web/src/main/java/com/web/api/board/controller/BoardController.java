@@ -58,7 +58,8 @@ public class BoardController {
     @ApiOperation(value = "게시판 글 등록")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "success insert board") })
     @PostMapping("/")
-    public ResponseEntity<BoardInfo> postBoardContent(BoardInfo boardInfo,
+    public ResponseEntity<BoardInfo> postBoardContent(
+            BoardInfo boardInfo,
             @RequestParam(value = "boardFile", required = false) MultipartFile[] file,
             @RequestParam(value = "fileGubun") Integer fileGubun) throws Exception {
 
@@ -79,7 +80,7 @@ public class BoardController {
      * @throws Exception
      */
     @ApiOperation(value = "게시판 목록 리스트", notes = "사용중인 게시판 목록을 가져옵니다.")
-    @ApiResponses(value = { @ApiResponse(code = 201, message = "success search list"),
+            @ApiResponses(value = { @ApiResponse(code = 201, message = "success search list"),
             @ApiResponse(code = 400, message = "no content") })
     @GetMapping("/list") // 게시판 목록
     public ResponseEntity<List<BoardListInfo>> getBoardList() throws Exception {
@@ -103,8 +104,10 @@ public class BoardController {
      */
     @ApiOperation("게시판 글 목록")
     @GetMapping("/{boardName}") // 게시판 글 목록
-    public ResponseEntity<List<BoardInfo>> getBoardContentList(@PathVariable("boardName") String boardName,
-            @RequestParam("currentPage") Integer currentPage, @RequestParam("limit") Integer limit) throws Exception {
+    public ResponseEntity<List<BoardInfo>> getBoardContentList(
+            @PathVariable("boardName") String boardName,
+            @RequestParam("currentPage") Integer currentPage,
+            @RequestParam("limit") Integer limit) throws Exception {
 
         List<BoardInfo> boardContentList = boardService.getBoardContentList(boardName, currentPage, limit);
 
@@ -121,12 +124,12 @@ public class BoardController {
      */
     @ApiOperation("메인 화면 게시판 게시글 조회")
     @GetMapping(value = "/{boardName}/list", produces = "application/json; charset=utf8") // 메인 게시판 글 목록
-    public ResponseEntity<List<BoardInfo>> getBoardContentListForMain(@PathVariable("boardName") String boardName,
+    public ResponseEntity<List<BoardInfo>> getBoardContentListForMain(
+            @PathVariable("boardName") String boardName,
             @RequestParam("limitNum") Integer limit) throws Exception {
 
         List<BoardInfo> requestResult = boardService.getBoardContentListForMain(boardName, limit);
 
-        // HATEOAS
         return ResponseEntity.ok(requestResult);
     }
 
@@ -139,8 +142,8 @@ public class BoardController {
      */
     @ApiOperation("게시글 갯수")
     @GetMapping("/{boardName}/rows") // 게시판 글 갯수
-    public ResponseEntity<Map<String, Long>> geteBoardContentCount(@PathVariable("boardName") String boardName)
-            throws Exception {
+    public ResponseEntity<Map<String, Long>> geteBoardContentCount(
+            @PathVariable("boardName") String boardName) throws Exception {
 
         Map<String, Long> resultMap = new HashMap<String, Long>();
 
@@ -159,7 +162,8 @@ public class BoardController {
      */
     @ApiOperation("게시판 글 상세정보")
     @GetMapping("/{boardName}/{boardIdx}") // 게시판 글 상세정보
-    public ResponseEntity<BoardInfo> getBoardContentDetail(@PathVariable("boardName") String boardName,
+    public ResponseEntity<BoardInfo> getBoardContentDetail(
+            @PathVariable("boardName") String boardName,
             @PathVariable("boardIdx") Integer boardIdx) throws Exception {
 
         BoardInfo resultBoardInfo = boardService.getBoardContentDetail(boardName, boardIdx);
@@ -177,7 +181,8 @@ public class BoardController {
      */
     @ApiOperation("게시판 글 삭제")
     @DeleteMapping("/{boardName}/{boardIdx}") // 게시판 글 삭제
-    public ResponseEntity<Map<String, String>> deleteBoardContent(@PathVariable("boardName") String boardName,
+    public ResponseEntity<Map<String, String>> deleteBoardContent(
+            @PathVariable("boardName") String boardName,
             @PathVariable("boardIdx") Integer boardIdx) throws Exception {
 
         Map<String, String> resultMap = new HashMap<String, String>();
@@ -198,8 +203,10 @@ public class BoardController {
      */
     @ApiOperation("게시판 글 수정")
     @PutMapping("/{boardName}/{boardIdx}")
-    public ResponseEntity<BoardInfo> updateBoardContent(@PathVariable("boardName") String boardName,
-            @PathVariable("boardIdx") Integer boardIdx, @RequestBody BoardContentUpdateVO boardContent) {
+    public ResponseEntity<BoardInfo> updateBoardContent(
+            @PathVariable("boardName") String boardName,
+            @PathVariable("boardIdx") Integer boardIdx,
+            @RequestBody BoardContentUpdateVO boardContent) {
 
         BoardInfo resultBoardInfo = boardService.updateBoardContent(boardName, boardIdx, boardContent);
 
@@ -230,7 +237,8 @@ public class BoardController {
      */
     @ApiOperation("게시글 조회수 증가")
     @PutMapping("/{boardName}/{boardIdx}/counts")
-    public ResponseEntity<Map<String, String>> increaseViewConut(@PathVariable String boardName,
+    public ResponseEntity<Map<String, String>> increaseViewConut(
+            @PathVariable String boardName,
             @PathVariable Integer boardIdx) {
 
         Map<String, String> resultMap = new HashMap<String, String>();

@@ -3,6 +3,7 @@ package com.web.api.common.conf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,7 +27,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/user").authenticated().anyRequest().permitAll().and().sessionManagement()
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST).hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.PUT).hasAuthority("ROLE_USER")
+                .antMatchers(HttpMethod.DELETE).hasAuthority("ROLE_USER")
+                .antMatchers("/user").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

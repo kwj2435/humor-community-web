@@ -8,20 +8,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class JwtUtilService {
 
-    final private long ACCESS_TOKEN_TIME = 30 * 60 * 1000L;
-    final private long REFRESH_TOKEN_TIME = 10 * 60 * 1000L;
+    final private long ACCESS_TOKEN_TIME = 1000L;
+    final private long REFRESH_TOKEN_TIME = 1000L;
     private JwtUserDetailsService jwtUserDetailsService;
     private String SECRET_KEY = "communitySecure";
 
     // 1. 조회된 유저정보를 기반으로 로그인정보 검증 위해 검증토큰 발행
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(this.getUserEmailInToken(token));
+    public Authentication getAuthentication(String accessToken,String refreshToken) {
+        
+        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(this.getUserEmailInToken(accessToken));
         // 만들어진 UsernamePasswordAuthenticationToken은 검증을 위해 AuthenticationManager의 인스턴스로
         // 전달된다.
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -39,7 +41,16 @@ public class JwtUtilService {
         return Jwts.builder().setClaims(claims).setIssuedAt(now).setExpiration(new Date(now.getTime() + validTime))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
-
+    public Boolean isTokenExpired(String token){
+        final Date expiration = extractAllClaims(token).getExpiration();
+        return expiration.before(new Date());
+    }
+    public Claims extractAllClaims(String accessToken) throws ExpiredJwtException {
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(accessToken)
+                .getBody();
+    }
     public String createAccessToken(String userEmail, String roles) {
         return createToken(userEmail, roles, ACCESS_TOKEN_TIME);
     }
