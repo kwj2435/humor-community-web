@@ -11,69 +11,83 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tb_file")
+@Table(name = "tb_file")
 public class FileInfo {
-	@Id
-	@Column(name = "file_no")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int fileNo;
-	@Column(name = "board_idx")
-	private int boardIdx;
-	@Column(name = "file_status")
-	private int fileStatus;
-	@Column(name = "file_original_name")
-	private String fileOriginalName;
-	@Column(name = "file_stored_name")
-	private String fileStoredName;
-	@Column(name = "file_path")
-	private String filePath;
-	@Column(name = "file_begin_date")
-	private Date fileBeginDate;
-	
-	@PrePersist
-	private void onCreate() {
-		this.fileBeginDate = new Date();
-	}
-	public int getFileStatus() {
-		return fileStatus;
-	}
-	public void setFileStatus(int fileStatus) {
-		this.fileStatus = fileStatus;
-	}
-	public int getBoardIdx() {
-		return boardIdx;
-	}
-	public void setBoardIdx(int boardIdx) {
-		this.boardIdx = boardIdx;
-	}
-	public int getFileNo() {
-		return fileNo;
-	}
-	public void setFileNo(int fileNo) {
-		this.fileNo = fileNo;
-	}
-	public String getFileOriginalName() {
-		return fileOriginalName;
-	}
-	public void setFileOriginalName(String fileOriginalName) {
-		this.fileOriginalName = fileOriginalName;
-	}
-	public String getFileStoredName() {
-		return fileStoredName;
-	}
-	public void setFileStoredName(String fileStoredName) {
-		this.fileStoredName = fileStoredName;
-	}
-	public String getFilePath() {
-		return filePath;
-	}
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-	public Date getFileBeginDate() {
-		return fileBeginDate;
-	}
-	public void setFileBeginDate(Date fileBeginDate) {
-		this.fileBeginDate = fileBeginDate;
-	}
+    @Id
+    @Column(name = "file_no")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int fileNo;
+    @Column(name = "board_idx")
+    private int boardIdx;
+    @Column(name = "file_status")
+    private int fileStatus;
+    @Column(name = "file_original_name")
+    private String fileOriginalName;
+    @Column(name = "file_stored_name")
+    private String fileStoredName;
+    @Column(name = "file_path")
+    private String filePath;
+    @Column(name = "file_begin_date")
+    private Date fileBeginDate;
+
+    @PrePersist
+    private void onCreate() {
+        this.fileBeginDate = new Date();
+    }
+
+    public int getFileStatus() {
+        return fileStatus;
+    }
+
+    public void setFileStatus(int fileStatus) {
+        this.fileStatus = fileStatus;
+    }
+
+    public int getBoardIdx() {
+        return boardIdx;
+    }
+
+    public void setBoardIdx(int boardIdx) {
+        this.boardIdx = boardIdx;
+    }
+
+    public int getFileNo() {
+        return fileNo;
+    }
+
+    public void setFileNo(int fileNo) {
+        this.fileNo = fileNo;
+    }
+
+    public String getFileOriginalName() {
+        return fileOriginalName;
+    }
+
+    public void setFileOriginalName(String fileOriginalName) {
+        this.fileOriginalName = fileOriginalName;
+    }
+
+    public String getFileStoredName() {
+        return fileStoredName;
+    }
+
+    public void setFileStoredName(String fileStoredName) {
+        this.fileStoredName = fileStoredName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public Date getFileBeginDate() {
+        return fileBeginDate;
+    }
+
+    public void setFileBeginDate(Date fileBeginDate) {
+        this.fileBeginDate = fileBeginDate;
+    }
 }

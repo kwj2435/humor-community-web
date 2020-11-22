@@ -22,95 +22,106 @@ import com.web.api.common.repository.FileRepository;
 
 @Service
 public class FileService {
-	@Autowired
-	private FileRepository fileRepository;
-	private Path fileLocation;
-	private final String FILE_PATH = "C:\\upload\\";
-	
-	public FileService() {		
-		fileLocation = Paths.get(FILE_PATH).normalize();
-		
-		try{
-			Files.createDirectories(this.fileLocation);
-		}catch(IOException e) {
-			throw new CustomFileUploadException("파일 업로드 디렉토리 생성 실패.", e);
-		}
-	}
-	
-	public void uploadMultiFile(MultipartFile[] file,int boardIdx,int fileGubun) throws IllegalStateException, IOException {
-		UUID uuid = UUID.randomUUID();
-		String fileOriginalName = null;
-		String fileStoredName = null;
-		String filePath = null;
-		
-		System.out.println("file == "+file);
-		if(file == null) { return ; }
-		List<FileInfo> fileList = new ArrayList<FileInfo>();
-		
-		for(int i = 0 ; i < file.length ; i++) {
-			FileInfo fileInfo = new FileInfo();
-			System.out.println(file[i].getName());
-			fileOriginalName = file[i].getOriginalFilename();
-			fileStoredName = uuid.toString() + "_" + fileOriginalName;
-			filePath = FILE_PATH + fileStoredName;
-			
-			if(fileGubun == 0) { fileInfo.setFileStatus(0); }	//첨부파일  1 or 게시글사진및 동영상 0
-			else { fileInfo.setFileStatus(1); }
-			fileInfo.setBoardIdx(boardIdx);
-			fileInfo.setFileOriginalName(fileOriginalName);
-			fileInfo.setFileStoredName(fileStoredName);
-			fileInfo.setFilePath(filePath);
-			
-			fileList.add(fileInfo);
-			file[i].transferTo(new File(FILE_PATH + fileStoredName));
-		}
-		System.out.println(fileList.size());
-		try {
-			fileRepository.saveAll(fileList);
-		}catch(Exception e) {
-			throw new CustomFileUploadException("파일 업로드 디렉토리 생성 실패.", e);
-		}
-	}
-	public void uploadSingleFile() {
-		
-	}
-	public Resource downloadFile(int fileNo) {
-		FileInfo fileInfo = fileRepository.findByFileNo(fileNo);
-		try {
-			Path filePath = this.fileLocation.resolve(fileInfo.getFileStoredName()).normalize();
-			Resource resource = new UrlResource(filePath.toUri());
+    @Autowired
+    private FileRepository fileRepository;
+    private Path fileLocation;
+    private final String FILE_PATH = "C:\\upload\\";
 
-			if(resource.exists()) {
-				return resource;
-			}else {
-				throw new CustomFileDownloadException("파일을 찾을 수 없습니다.");
-			}
-		}catch(Exception e) {
-			throw new CustomFileDownloadException("파일을 찾을 수 없습니다.",e);
-		}
-	}
-	public FileInfo getFileInfo(int fileNo) {
-		
-		FileInfo savedFileInfo = fileRepository.findByFileNo(fileNo);
-		
-		return savedFileInfo;
-	}
-	public List<FileInfo> getFileInfoList(int boardIdx){
-		return fileRepository.findAllByBoardIdx(boardIdx);
-	}
-	
-	public Resource test() {
-		try {
-			Path filePath = this.fileLocation.resolve("test.jpg").normalize();
-			Resource resource = new UrlResource(filePath.toUri());
+    public FileService() {
+        fileLocation = Paths.get(FILE_PATH).normalize();
 
-			if(resource.exists()) {
-				return resource;
-			}else {
-				throw new CustomFileDownloadException("파일을 찾을 수 없습니다.");
-			}
-		}catch(Exception e) {
-			throw new CustomFileDownloadException("파일을 찾을 수 없습니다.",e);
-		}
-	}
+        try {
+            Files.createDirectories(this.fileLocation);
+        } catch (IOException e) {
+            throw new CustomFileUploadException("파일 업로드 디렉토리 생성 실패.", e);
+        }
+    }
+
+    public void uploadMultiFile(MultipartFile[] file, int boardIdx, int fileGubun)
+            throws IllegalStateException, IOException {
+        UUID uuid = UUID.randomUUID();
+        String fileOriginalName = null;
+        String fileStoredName = null;
+        String filePath = null;
+
+        System.out.println("file == " + file);
+        if (file == null) {
+            return;
+        }
+        List<FileInfo> fileList = new ArrayList<FileInfo>();
+
+        for (int i = 0; i < file.length; i++) {
+            FileInfo fileInfo = new FileInfo();
+            System.out.println(file[i].getName());
+            fileOriginalName = file[i].getOriginalFilename();
+            fileStoredName = uuid.toString() + "_" + fileOriginalName;
+            filePath = FILE_PATH + fileStoredName;
+
+            if (fileGubun == 0) {
+                fileInfo.setFileStatus(0);
+            } // 첨부파일 1 or 게시글사진및 동영상 0
+            else {
+                fileInfo.setFileStatus(1);
+            }
+            fileInfo.setBoardIdx(boardIdx);
+            fileInfo.setFileOriginalName(fileOriginalName);
+            fileInfo.setFileStoredName(fileStoredName);
+            fileInfo.setFilePath(filePath);
+
+            fileList.add(fileInfo);
+            file[i].transferTo(new File(FILE_PATH + fileStoredName));
+        }
+        System.out.println(fileList.size());
+        try {
+            fileRepository.saveAll(fileList);
+        } catch (Exception e) {
+            throw new CustomFileUploadException("파일 업로드 디렉토리 생성 실패.", e);
+        }
+    }
+
+    public void uploadSingleFile() {
+
+    }
+
+    public Resource downloadFile(int fileNo) {
+        FileInfo fileInfo = fileRepository.findByFileNo(fileNo);
+        try {
+            Path filePath = this.fileLocation.resolve(fileInfo.getFileStoredName()).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new CustomFileDownloadException("파일을 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            throw new CustomFileDownloadException("파일을 찾을 수 없습니다.", e);
+        }
+    }
+
+    public FileInfo getFileInfo(int fileNo) {
+
+        FileInfo savedFileInfo = fileRepository.findByFileNo(fileNo);
+
+        return savedFileInfo;
+    }
+
+    public List<FileInfo> getFileInfoList(int boardIdx) {
+        return fileRepository.findAllByBoardIdx(boardIdx);
+    }
+
+    public Resource test() {
+        try {
+            Path filePath = this.fileLocation.resolve("test.jpg").normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new CustomFileDownloadException("파일을 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            throw new CustomFileDownloadException("파일을 찾을 수 없습니다.", e);
+        }
+    }
 }

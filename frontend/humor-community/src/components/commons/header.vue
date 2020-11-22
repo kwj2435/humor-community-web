@@ -85,7 +85,8 @@ export default {
       axios.post('http://localhost:8081/v1/api/user/login',form)
       .then(res => {
         console.log(res);
-        storage.setItem("X-AUTH-TOKEN",res.data.token);
+        storage.setItem("X-AUTH-ACCESSTOKEN",res.data.accessToken);
+        storage.setItem("X-AUTH-REFRESHTOKEN",res.data.refreshToken)
         storage.setItem("userEmail",res.data.userInfo.userEmail);
         storage.setItem("userNickname",res.data.userInfo.userNickname);
         location.reload();

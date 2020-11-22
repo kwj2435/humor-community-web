@@ -33,51 +33,54 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/v1/api/")
-@Api(value="FileController V1")
+@Api(value = "FileController V1")
 public class FileController {
-	
-	@Autowired private FileService fileService;
-	
-	@ApiOperation("다중 파일 업로드")
-	@SuppressWarnings("unchecked")
-	@PostMapping("/multiupload")
-	public JSONObject uploadMultiFile(
-			MultipartFile[] file,
-			@RequestBody Integer boardIdx,
-			@RequestBody Integer fileGubun) throws IllegalStateException, IOException {
-		
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("uploaded", true);
-		jsonObject.put("url","http://localhost:8081/v1/api");
-		fileService.uploadMultiFile(file,boardIdx,fileGubun);
-		return jsonObject;
-	}
-	@ApiOperation("파일 정보 가져오기")
-	@GetMapping("/file/{boardIdx}")
-	public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable Integer boardIdx){
-		
-		FileInfo fileInfo = fileService.getFileInfo(boardIdx);
-		
-		return ResponseEntity.ok(fileInfo);
-	}
-	@ApiOperation("파일 업로드")
-	@PostMapping("/singleUpload")
-	public byte[] uploadSingleFile() throws IOException {
-		InputStream in = getClass().getResourceAsStream("C:\\upload\\test.jpg");
-	    return IOUtils.toByteArray(in);
-	}
-	@ApiOperation("파일 다운로드")
-	@GetMapping("/download/{fileNo}")
-	public ResponseEntity<Resource> fileDownload(@PathVariable Integer fileNo,HttpServletRequest request) throws IOException{
-		String contentType = null;
-		Resource fileResource = fileService.downloadFile(fileNo);
-		contentType = request.getServletContext().getMimeType(fileResource.getFile().getAbsolutePath());
-		if(contentType == null) {
-			contentType = "application/octet-stream";
-		}
-		
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileResource.getFilename() + "\"")
-				.body(fileResource);
-	}
+
+    @Autowired
+    private FileService fileService;
+
+    @ApiOperation("다중 파일 업로드")
+    @SuppressWarnings("unchecked")
+    @PostMapping("/multiupload")
+    public JSONObject uploadMultiFile(MultipartFile[] file, @RequestBody Integer boardIdx,
+            @RequestBody Integer fileGubun) throws IllegalStateException, IOException {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("uploaded", true);
+        jsonObject.put("url", "http://localhost:8081/v1/api");
+        fileService.uploadMultiFile(file, boardIdx, fileGubun);
+        return jsonObject;
+    }
+
+    @ApiOperation("파일 정보 가져오기")
+    @GetMapping("/file/{boardIdx}")
+    public ResponseEntity<FileInfo> getFileOriginalName(@PathVariable Integer boardIdx) {
+
+        FileInfo fileInfo = fileService.getFileInfo(boardIdx);
+
+        return ResponseEntity.ok(fileInfo);
+    }
+
+    @ApiOperation("파일 업로드")
+    @PostMapping("/singleUpload")
+    public byte[] uploadSingleFile() throws IOException {
+        InputStream in = getClass().getResourceAsStream("C:\\upload\\test.jpg");
+        return IOUtils.toByteArray(in);
+    }
+
+    @ApiOperation("파일 다운로드")
+    @GetMapping("/download/{fileNo}")
+    public ResponseEntity<Resource> fileDownload(@PathVariable Integer fileNo, HttpServletRequest request)
+            throws IOException {
+        String contentType = null;
+        Resource fileResource = fileService.downloadFile(fileNo);
+        contentType = request.getServletContext().getMimeType(fileResource.getFile().getAbsolutePath());
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileResource.getFilename() + "\"")
+                .body(fileResource);
+    }
 }

@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.web.api.board.entity.CommentInfo;
 
-public interface CommentRepository extends JpaRepository<CommentInfo, Integer>{
-	
-	public List<CommentInfo> findAllByBoardIdx(int boardIdx);
-	
-	@Transactional
-	public int deleteByCommentIdx(int commentIdx);
-	
-	public CommentInfo findByCommentIdx(int commentIdx);
+public interface CommentRepository extends JpaRepository<CommentInfo, Integer> {
+
+    public List<CommentInfo> findAllByBoardIdx(int boardIdx);
+
+    @Transactional
+    public int deleteByCommentIdx(int commentIdx);
+
+    public CommentInfo findByCommentIdx(int commentIdx);
 }

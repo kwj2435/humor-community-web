@@ -17,23 +17,24 @@ import com.web.api.security.service.JwtUserDetailsService;
 import com.web.api.security.service.JwtUtilService;
 
 @Component
-public class JwtRequestFilter extends OncePerRequestFilter{
-	@Autowired
-	private JwtUtilService jwtUtilService;
-	
-	// 1. Client 요청 헤더에서 Authorization 부분을 추출
-	// 2. Jwt 존재시 토큰 유효성 검사
-	// 3. Jwt 미존재시 로그인 절차 이후 토큰 발행
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,FilterChain filterChain) throws ServletException,IOException{
-		final String accessToken = request.getHeader("X-AUTO-ACCESSTOKEN");
-		final String refreshToken = request.getHeader("X-AUTO-REFRESHTOKEN");
-		
-		if (accessToken != null) {
+public class JwtRequestFilter extends OncePerRequestFilter {
+    @Autowired
+    private JwtUtilService jwtUtilService;
+
+    // 1. Client 요청 헤더에서 Authorization 부분을 추출
+    // 2. Jwt 존재시 토큰 유효성 검사
+    // 3. Jwt 미존재시 로그인 절차 이후 토큰 발행
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        final String accessToken = request.getHeader("X-AUTH-ACCESSTOKEN");
+        final String refreshToken = request.getHeader("X-AUTH-REFRESHTOKEN");
+
+        if (accessToken != null) {
             Authentication authentication = jwtUtilService.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-		//발행된 Authentication을 가지고 Manager로 넘겨서 검증절차를 진행한다.
-		filterChain.doFilter(request, response);
-	}
+        // 발행된 Authentication을 가지고 Manager로 넘겨서 검증절차를 진행한다.
+        filterChain.doFilter(request, response);
+    }
 }
